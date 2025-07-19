@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { SignInData, SignInResponse, User } from "../type";
+import type { SignInData, SignInResponse, User, SignUpData } from "../type";
 
 const ENDPOINT_URL = 'http://localhost:3002/user'; // TODO: User処理のURLを追記する
 
@@ -16,6 +16,10 @@ const userApi = {
             
             console.log("ログイン処理::: succeed")
             return { isAuthenticated: true, id: user.id };
+    },
+    async signUp(signUpData: SignUpData): Promise<boolean> {
+            const res = await axios.post(`${ENDPOINT_URL}`, signUpData);
+            return (res.statusText == 'OK');    // post処理が正しく行われた場合にtrueが返される
     },
     async getUserInfo(id: string): Promise<User | undefined> {
             const users = (await axios.get<User[]>(`${ENDPOINT_URL}`)).data;
