@@ -84,7 +84,7 @@ const SignInPage = () => {
     
           <div className="text-center text-sm text-gray-600">
             アカウントを持っていない方は{" "}
-            <a href="#" className="text-indigo-600 hover:underline">
+            <a href="/signup" className="text-indigo-600 hover:underline">
               ユーザー登録
             </a>
           </div>
