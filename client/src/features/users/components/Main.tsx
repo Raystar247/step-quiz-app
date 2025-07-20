@@ -10,7 +10,6 @@ const Main = () => {
     const userId = useSelector((state: RootState) => state.user.id);
 
     useEffect(() =>  {
-        console.log("Main画面::::: 描画開始")
         const getUser = async () => {
             const id = sessionStorage.getItem("userId_");
             if (!id) {
@@ -19,7 +18,6 @@ const Main = () => {
             }
             const _user = await userApi.getUserInfo(id);
             setUser(_user);
-            console.log("詳細なUser情報fetch::::: start ")
         };
         getUser();
     }, [userId]);

@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, type Dispatch } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { SignInData, SignInResponse } from "../type";
 import userApi from "../api/userApi";
 import type { AxiosError } from "axios";
@@ -13,7 +13,6 @@ const user = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(signInAsync.fulfilled, (state, action) => {
-                console.log("Redux extraReducer:: start  ログイン状態・ID更新")
                 const payload = action.payload;
                 state.isSignedIn = payload.isAuthenticated;
                 if (state.isSignedIn) {
@@ -35,7 +34,6 @@ const user = createSlice({
 const signInAsync = createAsyncThunk<SignInResponse, SignInData>(
     'user/signInAsync',
     async (payload: SignInData, { rejectWithValue }) => {
-        console.log("Redux Middleware:: start");
         try {
             const res = await userApi.signIn(payload);
             return res;

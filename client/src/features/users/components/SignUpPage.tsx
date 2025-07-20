@@ -51,14 +51,12 @@ const SignUpPage = () => {
       return;
     }
 
-    console.log("Sign upボタン押下");
     await userApi.signUp(form);
     navigate("/signin");
   };
 
   useEffect(() => {
     if (userInfo.isSignedIn) {
-      console.log(`登録成功: ユーザーID = ${userInfo.id}`);
       navigate("/user");
     }
   }, [userInfo]);

@@ -23,14 +23,12 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (userInfo.isSignedIn) {
-      console.log(`ログイン成功: ユーザーID = ${userInfo.id}`);
       navigate('/user');
     }
   }, [userInfo]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("Sign inボタン押下");
         await dispatch(signInAsync(form));
     };
 

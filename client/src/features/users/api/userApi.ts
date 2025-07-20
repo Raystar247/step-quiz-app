@@ -5,16 +5,13 @@ const ENDPOINT_URL = 'http://localhost:3002/user'; // TODO: User処理のURLを�
 
 const userApi = {
     async signIn(signInData: SignInData): Promise<SignInResponse> {
-            console.log("ログインAPI::: start");
+
             const users = (await axios.get<User[]>(`${ENDPOINT_URL}`)).data;
             const user = users.find((data: User) => data.email == signInData.email);
-            console.log(users);
             if (user == undefined || user.password != signInData.password) {
-                console.log("ログイン処理::: fail")
                 return { isAuthenticated: false, id: "" };
             }
             
-            console.log("ログイン処理::: succeed")
             return { isAuthenticated: true, id: user.id };
     },
     async signUp(signUpData: SignUpData): Promise<boolean> {
