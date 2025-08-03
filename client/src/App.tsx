@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import store from './stores'
 import UserMain from './features/users/components/Main'
 import SignUpPage from './features/users/components/SignUpPage'
+import Timer from './features/stepq/components/Timer'
 
 function App() {
 
