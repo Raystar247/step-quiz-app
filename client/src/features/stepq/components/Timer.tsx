@@ -3,7 +3,6 @@ import image_frame from "../../../assets/stepq/timerframe_normal.png";
 
 
 const Timer: React.FC = () => {
-    const measuring_time__100ms = 20 * 60 * 100;
     const [elapsed_100ms, setElapsed_100ms] = useState(0);  // 100ms単位の経過時間
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 

@@ -18,7 +18,6 @@ function App() {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/user" element={<UserMain />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/timer" element={<Timer />} />
         </Routes>
       </BrowserRouter>
       </Provider>
