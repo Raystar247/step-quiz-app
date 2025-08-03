@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import store from './stores'
 import UserMain from './features/users/components/Main'
 import SignUpPage from './features/users/components/SignUpPage'
+import Timer from './features/stepq/components/Timer'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/user" element={<UserMain />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/timer" element={<Timer />} />
         </Routes>
       </BrowserRouter>
       </Provider>
