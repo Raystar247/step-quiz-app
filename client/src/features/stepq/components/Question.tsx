@@ -1,4 +1,12 @@
+import { useState } from "react";
+
 const Question: React.FC = () => {
+    const [answer, setAnswer] = useState('');
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setAnswer(e.target.value);
+    };
+
     return (
         <div className="w-full max-w-md bg-white shadow-md p-4 space-y-6">
             <div>
@@ -12,6 +20,7 @@ const Question: React.FC = () => {
                     type="text" 
                     id="answer" name="answer"
                     placeholder="answer"
+                    onChange={handleChange}
                     className="w-full py-2 border-b focus:outline-none focus:border-b-2 focus:border-indigo-500 placeholder-gray-500 placeholder-opacity-50"
                 />
             </form>
