@@ -11,7 +11,7 @@ const stepqApi = {
         const qgroups = (await axios.get<QGroup[]>(`${endpointQgroup}`)).data;
         const qgroup = qgroups.find((data: QGroup) => data.title === qgroupKeyword );
         if (qgroup == undefined || passphrase != qgroup.passphrase) {
-            return 'failure';
+            return '';
         }
 
         const trialData: TrialPostData = {
@@ -21,13 +21,12 @@ const stepqApi = {
         };
         const res = await axios.post(`${endpointTrial}`, trialData);
         console.log(res);
-        return res.status == 201 ? res.data.id : 'failure2';
+        return res.status == 201 ? res.data.id : '';
     }
 };
 
 const dateToISOStringSeconds = (date: Date): string => {
     const _ = new Date(date);
-    _.setMilliseconds(0);
     return _.toISOString().replace(/\.\d{3}Z$/, 'Z');
 };
 
