@@ -21,7 +21,7 @@ const TrialSetting: React.FC = () => {
         console.log(userId);
         const str = await stepqApi.generateTrial(form.keyword, form.passphrase, userId);
         console.log(str);
-        if (str == '') { return; }  // Trialデータの送信失敗した場合何もしない
+        if (str == '') { return; }  // Trialデータの生成に失敗した場合何もしない
         navigate(`/stepq/${str}`);
     };
 
