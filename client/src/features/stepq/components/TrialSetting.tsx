@@ -1,7 +1,7 @@
 import { useState, type ReactEventHandler } from "react";
 import stepqApi from "../api/stepqApi";
-import { useSelector } from "react-redux";
-import type { RootState } from "../../../stores";
+import { useSelector, type RootState } from "../../../stores";
+import { useNavigate } from "react-router-dom";
 
 const TrialSetting: React.FC = () => {
 
@@ -10,6 +10,7 @@ const TrialSetting: React.FC = () => {
         passphrase: ''
     });
     const userId = useSelector((state: RootState) => state.user.id);
+    const navigate = useNavigate();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -20,6 +21,7 @@ const TrialSetting: React.FC = () => {
         console.log(userId);
         const str = await stepqApi.generateTrial(form.keyword, form.passphrase, userId);
         console.log(str);
+        navigate(`/stepq/${str}`);
     };
 
     return (
