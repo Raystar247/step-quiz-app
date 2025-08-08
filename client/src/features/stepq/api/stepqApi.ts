@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { QGroup, TrialPostData } from '../type';
+import type { QGroup, Trial, TrialPostData } from '../type';
 
 const ENDPOINT_URL = 'http://localhost:3002';
 const endpointUser = `${ENDPOINT_URL}/user`;
@@ -12,6 +12,12 @@ const stepqApi = {
         const qgroup = qgroups.find((data: QGroup) => data.title === qgroupKeyword );
         if (qgroup == undefined || passphrase != qgroup.passphrase) {
             return '';
+        }
+
+        const trials = (await axios.get<Trial[]>(`${endpointTrial}`)).data;
+        const trial = trials.find((data: Trial) => (data.userId === userId && data.qgroupId === qgroup.id));
+        if (trial != undefined) {
+            return trial.id;
         }
 
         const trialData: TrialPostData = {
