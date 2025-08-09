@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { QGroup, Trial, TrialPostData } from '../type';
+import { ENDPOINT_URL } from '../../../references/util';
 
-const ENDPOINT_URL = 'http://localhost:3002';
 const endpointUser = `${ENDPOINT_URL}/user`;
 const endpointTrial = `${ENDPOINT_URL}/trial`;
 const endpointQgroup = `${ENDPOINT_URL}/qgroup`;
