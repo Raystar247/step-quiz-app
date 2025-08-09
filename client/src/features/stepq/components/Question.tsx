@@ -1,19 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { Question, Trial } from "../type";
+import axios from "axios";
 
-const Question: React.FC = () => {
+type Props = {
+    trial: Trial;
+    index: number;
+    setIndex: React.Dispatch<React.SetStateAction<number>>;
+};
+
+const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
     const [answer, setAnswer] = useState('');
+    const [question, setQuestion] = useState<Question>();
+
+    useEffect(() => {
+        console.log(`index:${index}`)
+        const getQuestion = async () => {
+            const q = (await axios.get('http://localhost:3002/question', {
+                params: { qgroupId: trial.qgroupId, index: index }
+            })).data[0];
+            setQuestion(q);
+        };
+        getQuestion();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAnswer(e.target.value);
     };
-
+    if (!question) {
+        return (<><p>エラー発生</p></>);
+    }
     return (
         <div className="w-full max-w-md bg-white shadow-md p-4 space-y-6">
             <div>
-                第 <span className="font-semibold text-lg">1</span> 問
+                第 <span className="font-semibold text-lg">{index}</span> 問
             </div>
             <div className="shadow-sm rounded-sm p-2 text-left border-l-2 border-cyan-300">
-                ヨルシカの楽曲『左右盲』で、歌詞の「心をわすれる」の表記はまさに心を忘れた何？
+                {question.questionText}
             </div>
             <form>
                 <input 
@@ -28,4 +50,4 @@ const Question: React.FC = () => {
     );
 };
 
-export default Question;
+export default QuestionComponent;

@@ -2,12 +2,14 @@ export type TrialPostData = {
     qgroupId: string;
     userId: string;
     startTime: string;
+    index: number
 };
 
 export type Trial = {
     id: string;
     qgroupId: string;
     userId: string;
+    index: number;
     startTime: string;
 };
 
