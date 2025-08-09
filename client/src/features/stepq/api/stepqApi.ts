@@ -23,6 +23,7 @@ const stepqApi = {
         const trialData: TrialPostData = {
             qgroupId: qgroup.id,
             userId: userId,
+            index: 1,
             startTime: dateToISOStringSeconds(new Date())
         };
         const res = await axios.post(`${endpointTrial}`, trialData);
