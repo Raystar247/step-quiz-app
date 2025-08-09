@@ -17,3 +17,21 @@ export type QGroup = {
     passphrase: string;
     timeLimit: number;
 };
+
+export type Question = {
+    id: string;
+    qgroupId: string;
+    index: number;
+    questionText: string;
+    correctAnswer: string;
+    description: string;
+};
+
+export type Answer = {
+    id: string;
+    trialId: string;
+    questionId: string;
+    answer: string;
+    score: number;
+    memo: string;
+};
