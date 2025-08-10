@@ -1,10 +1,11 @@
 import axios from 'axios';
-import type { QGroup, Trial, TrialPostData } from '../type';
+import type { QGroup, Question, Trial, TrialPostData } from '../type';
+import { ENDPOINT_URL } from '../../../references/util';
 
-const ENDPOINT_URL = 'http://localhost:3002';
 const endpointUser = `${ENDPOINT_URL}/user`;
 const endpointTrial = `${ENDPOINT_URL}/trial`;
 const endpointQgroup = `${ENDPOINT_URL}/qgroup`;
+const endpointQuestion = `${ENDPOINT_URL}/question`;
 
 const stepqApi = {
     async generateTrial(qgroupKeyword: string, passphrase: string, userId: string): Promise<string> {
@@ -23,11 +24,26 @@ const stepqApi = {
         const trialData: TrialPostData = {
             qgroupId: qgroup.id,
             userId: userId,
+            index: 1,
             startTime: dateToISOStringSeconds(new Date())
         };
         const res = await axios.post(`${endpointTrial}`, trialData);
         console.log(res);
         return res.status == 201 ? res.data.id : '';
+    },
+    async fetchQuestion(qgroupId: string, index: number): Promise<Question | undefined> {
+        const question = (await axios.get<Question[]>(endpointQuestion, {
+            params: { qgroupId: qgroupId, index: index }
+        })).data;
+        if (question.length != 1) { return undefined; }
+        return question[0];
+    },
+    async fetchTrial(id: string): Promise<Trial | undefined> {
+        const trial = (await axios.get<Trial[]>(endpointTrial, {
+            params: { id: id }
+        })).data;
+        if (trial.length != 1) { return undefined; }
+        return trial[0];
     }
 };
 
