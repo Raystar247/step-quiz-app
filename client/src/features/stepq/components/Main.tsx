@@ -12,16 +12,7 @@ const Main: React.FC = () => {
     const userId = useSelector((state: RootState) => state.user.id);
 
     const [trial, setTrial] = useState<Trial>();
-
-    // 仮データ
     const [index, setIndex] = useState(0);
-    const _t = {
-      id: "c4b7",
-      qgroupId: "0001",
-      userId: "0000",
-      startTime: "2025-08-09T02:04:25Z",
-      index: 1
-    }
 
     useEffect(() => {
         // reduxの管理が正しくできていない → sessionStorageなどで正しく永続化する必要あり

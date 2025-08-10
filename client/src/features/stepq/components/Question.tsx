@@ -14,12 +14,12 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
     const [question, setQuestion] = useState<Question>();
 
     useEffect(() => {
-        const commApi = async () => {
+        const awake = async () => {
             const q = await stepqApi.fetchQuestion(trial.qgroupId, index);
             setQuestion(q);
         };
-        commApi();
-    });
+        awake();
+    }, [index]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAnswer(e.target.value);
