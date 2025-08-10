@@ -37,6 +37,13 @@ const stepqApi = {
         })).data;
         if (question.length != 1) { return undefined; }
         return question[0];
+    },
+    async fetchTrial(id: string): Promise<Trial | undefined> {
+        const trial = (await axios.get<Trial[]>(endpointTrial, {
+            params: { id: id }
+        })).data;
+        if (trial.length != 1) { return undefined; }
+        return trial[0];
     }
 };
 

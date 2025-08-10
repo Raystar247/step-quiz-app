@@ -9,6 +9,7 @@ export type Trial = {
     id: string;
     qgroupId: string;
     userId: string;
+    index: number;
     startTime: string;
 };
 
