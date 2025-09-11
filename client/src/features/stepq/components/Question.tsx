@@ -27,6 +27,7 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setAnswer("");
         setIndex(prev => prev + 1);
     };
 
@@ -46,6 +47,7 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
                     type="text" 
                     id="answer" name="answer"
                     placeholder="answer"
+                    value={answer}
                     onChange={handleChange}
                     className="w-full py-2 border-b focus:outline-none focus:border-b-2 focus:border-indigo-500 placeholder-gray-500 placeholder-opacity-50"
                 />
