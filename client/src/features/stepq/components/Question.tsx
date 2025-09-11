@@ -25,6 +25,12 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
         setAnswer(e.target.value);
     };
 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setAnswer("");
+        setIndex(prev => prev + 1);
+    };
+
     if (!question) {
         return <p>エラー発生</p>;
     }
@@ -36,11 +42,12 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
             <div className="shadow-sm rounded-sm p-2 text-left border-l-2 border-cyan-300">
                 {question.questionText}
             </div>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <input 
                     type="text" 
                     id="answer" name="answer"
                     placeholder="answer"
+                    value={answer}
                     onChange={handleChange}
                     className="w-full py-2 border-b focus:outline-none focus:border-b-2 focus:border-indigo-500 placeholder-gray-500 placeholder-opacity-50"
                 />
