@@ -25,15 +25,17 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
         setAnswer(e.target.value);
     };
 
+    if (!question) {
+        return <p>エラー発生</p>;
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        stepqApi.postAnswer(answer, trial.id, question.id);
         setAnswer("");
         setIndex(prev => prev + 1);
     };
 
-    if (!question) {
-        return <p>エラー発生</p>;
-    }
     return (
         <div className="w-full max-w-md bg-white shadow-md p-4 space-y-6">
             <div>
