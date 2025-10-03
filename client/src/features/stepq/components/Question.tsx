@@ -31,7 +31,7 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        stepqApi.postAnswer(answer, trial.id, question.id);
+        await stepqApi.postAnswer(answer, trial.id, question.id);
         setAnswer("");
         setIndex(prev => prev + 1);
     };
