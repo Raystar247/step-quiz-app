@@ -6,6 +6,7 @@ const endpointUser = `${ENDPOINT_URL}/user`;
 const endpointTrial = `${ENDPOINT_URL}/trial`;
 const endpointQgroup = `${ENDPOINT_URL}/qgroup`;
 const endpointQuestion = `${ENDPOINT_URL}/question`;
+const endpointAnswer = `${ENDPOINT_URL}/answer`;
 
 const stepqApi = {
     async generateTrial(qgroupKeyword: string, passphrase: string, userId: string): Promise<string> {
@@ -44,6 +45,17 @@ const stepqApi = {
         })).data;
         if (trial.length != 1) { return undefined; }
         return trial[0];
+    },
+    async postAnswer(answerText: string, trialId: string, questionId: string): Promise<boolean> {
+        const answerData = {
+            trialId: trialId,
+            questionId: questionId,
+            answer: answerText,
+            score: 0,
+            memo: ""
+        };
+        const res = await axios.post(endpointAnswer, answerData);
+        return res.status == 201;
     }
 };
 
