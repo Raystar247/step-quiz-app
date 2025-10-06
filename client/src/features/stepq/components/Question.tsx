@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Question, Trial } from "../type";
-import axios from "axios";
 import stepqApi from "../api/stepqApi";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     trial: Trial;
@@ -12,12 +12,21 @@ type Props = {
 const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
     const [answer, setAnswer] = useState('');
     const [question, setQuestion] = useState<Question>();
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const checkQuestionOrdered = async () => {
+            const nQuestions = (await stepqApi.fetchQuestionGroup(trial.qgroupId))?.nQuestions;
+            if (nQuestions == undefined) { return; }
+            if (index == nQuestions + 1) {
+                navigate("/stepq/end");
+            }
+        };
         const awake = async () => {
             const q = await stepqApi.fetchQuestion(trial.qgroupId, index);
             setQuestion(q);
         };
+        checkQuestionOrdered();
         awake();
     }, [index]);
 

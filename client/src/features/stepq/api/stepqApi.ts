@@ -38,6 +38,13 @@ const stepqApi = {
         if (question.length != 1) { return undefined; }
         return question[0];
     },
+    async fetchQuestionGroup(qgroupId: string): Promise<QGroup | undefined> {
+        const questionGroups = (await axios.get<QGroup[]>(endpointQgroup, {
+            params: { qgroupId: qgroupId }
+        })).data;
+        if (questionGroups.length != 1) { return undefined; }
+        return questionGroups[0];
+    },
     async fetchTrial(id: string): Promise<Trial | undefined> {
         const trial = (await axios.get<Trial[]>(endpointTrial, {
             params: { id: id }
