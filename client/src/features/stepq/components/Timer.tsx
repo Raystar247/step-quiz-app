@@ -3,6 +3,8 @@ import image_frame from "../../../assets/stepq/timerframe_normal.png";
 
 
 const Timer: React.FC = () => {
+
+    const timeLimit: number = 1000; // 制限時間
     const [elapsed_100ms, setElapsed_100ms] = useState(0);  // 100ms単位の経過時間
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -47,8 +49,8 @@ const Timer: React.FC = () => {
     }, [elapsed_100ms]);
 
 
-    // 表示用の残り秒数（100秒からカウントダウン）
-    const displaySeconds = formatRemainingTime(Math.max(0, 1000 - Math.floor(elapsed_100ms)));
+    // 表示用の残り秒数
+    const displaySeconds = formatRemainingTime(Math.max(0, timeLimit - Math.floor(elapsed_100ms)));
 
     return (
         <div className="w-full max-w-md flex justify-center mb-3">
