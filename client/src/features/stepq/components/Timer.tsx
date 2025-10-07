@@ -13,7 +13,7 @@ const Timer: React.FC = () => {
         const totalSeconds = Math.floor(time_100ms / 10);
         const minutes = Math.floor(totalSeconds / 60);
         const seconds = totalSeconds % 60;
-        const deciSeconds = elapsed_100ms % 10;
+        const deciSeconds = time_100ms % 10;
 
         const paddedMinutes = String(minutes).padStart(2, '0');
         const paddedSeconds = String(seconds).padStart(2, '0');
@@ -50,7 +50,7 @@ const Timer: React.FC = () => {
 
 
     // 表示用の残り秒数
-    const displaySeconds = formatRemainingTime(Math.max(0, timeLimit - Math.floor(elapsed_100ms)));
+    const displaySeconds = formatRemainingTime(Math.max(0, timeLimit - elapsed_100ms));
 
     return (
         <div className="w-full max-w-md flex justify-center mb-3">
