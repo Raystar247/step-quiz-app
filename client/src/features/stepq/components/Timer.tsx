@@ -57,7 +57,7 @@ const Timer: React.FC = () => {
             <div className="relative w-[50%] max-w-md flex justify-center">
                 <img src={image_frame} className="w-[100%] h-full" />
                 <div className="absolute w-full h-full top-[0%] flex items-center justify-center">
-                    <p className="text-lg tracking-wide">{displaySeconds}</p>
+                    <p className="text-xl tracking-wide">{displaySeconds}</p>
                 </div>
             </div>
         </div>
