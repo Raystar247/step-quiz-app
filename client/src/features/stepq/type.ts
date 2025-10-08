@@ -17,6 +17,7 @@ export type QGroup = {
     id: string;
     title: string;
     passphrase: string;
+    nQuestions: number;
     timeLimit: number;
 };
 
