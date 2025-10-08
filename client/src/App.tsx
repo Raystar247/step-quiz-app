@@ -5,10 +5,9 @@ import { Provider } from 'react-redux'
 import store from './stores'
 import UserMain from './features/users/components/Main'
 import SignUpPage from './features/users/components/SignUpPage'
-import Timer from './features/stepq/components/Timer'
-import Question from './features/stepq/components/Question'
 import TrialSetting from './features/stepq/components/TrialSetting'
 import StepqMain from './features/stepq/components/Main'
+import QuestionEnd from './features/stepq/components/QuestionEnd'
 
 function App() {
 
@@ -21,9 +20,9 @@ function App() {
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/user" element={<UserMain />} />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path='/q' element={<Question />} />
           <Route path='/setting_' element={<TrialSetting />} />
           <Route path='/stepq/:id' element={<StepqMain />} />
+          <Route path='/stepq/end' element={<QuestionEnd />} />
         </Routes>
       </BrowserRouter>
       </Provider>
