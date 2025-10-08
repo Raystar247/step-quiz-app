@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Question, Trial } from "../type";
+import type { QGroup, Question, Trial } from "../type";
 import stepqApi from "../api/stepqApi";
 import { useNavigate } from "react-router-dom";
 
@@ -15,18 +15,10 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkQuestionOrdered = async () => {
-            const nQuestions = (await stepqApi.fetchQuestionGroup(trial.qgroupId))?.nQuestions;
-            if (nQuestions == undefined) { return; }
-            if (index == nQuestions + 1) {
-                navigate("/stepq/end");
-            }
-        };
         const awake = async () => {
             const q = await stepqApi.fetchQuestion(trial.qgroupId, index);
             setQuestion(q);
         };
-        checkQuestionOrdered();
         awake();
     }, [index]);
 
@@ -35,9 +27,22 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
+        const compareToLastQuestion = async (): Promise<number> => {
+            const qgroup = await stepqApi.fetchQuestionGroup(trial.qgroupId);
+            if (qgroup == undefined) { return 2; }  // エラー値2を返す
+            return Math.sign(index - qgroup.nQuestions);
+        }; 
+
         e.preventDefault();
         setAnswer("");
-        setIndex(prev => prev + 1);
+        const relPos = await compareToLastQuestion();
+        if (relPos > 0) {   // 通常あり得ないケース
+            // TODO: エラー画面に遷移
+        } else if (relPos == 0) {   // 最終問題の解答後(正常の遷移)
+            navigate("/stepq/end");
+        } else {    // まだ未解答の問題があるケース
+            setIndex(prev => prev + 1);
+        }
     };
 
     if (!question) {
