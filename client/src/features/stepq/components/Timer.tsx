@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import image_frame from "../../../assets/stepq/timerframe_normal.png";
+import { useNavigate } from "react-router-dom";
 
 
 const Timer: React.FC = () => {
+
+    const navigate = useNavigate();
 
     const timeLimit: number = 1000; // 制限時間
     const [elapsed_100ms, setElapsed_100ms] = useState(0);  // 100ms単位の経過時間
@@ -43,8 +46,11 @@ const Timer: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (elapsed_100ms >= 1000) {
+        if (elapsed_100ms >= timeLimit) {
             stop();
+            navigate("/stepq/end", {
+                state: { key: "timeup" }
+            });
         } 
     }, [elapsed_100ms]);
 
