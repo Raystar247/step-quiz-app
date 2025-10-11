@@ -44,7 +44,9 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
         if (relPos > 0) {   // 通常あり得ないケース
             // TODO: エラー画面に遷移
         } else if (relPos == 0) {   // 最終問題の解答後(正常の遷移)
-            navigate("/stepq/end");
+            navigate("/stepq/end", {
+                state: { key: "answerall" }
+            });
         } else {    // まだ未解答の問題があるケース
             setIndex(prev => prev + 1);
         }
