@@ -9,6 +9,7 @@ import TrialSetting from './features/stepq/components/TrialSetting'
 import StepqMain from './features/stepq/components/Main'
 import QuestionEnd from './features/stepq/components/QuestionEnd'
 import ScoringSheet from './features/stepq/components/ScoringSheet'
+import ChatView from './features/stepq/components/ChatView'
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
           <Route path='/stepq/:id' element={<StepqMain />} />
           <Route path='/stepq/end' element={<QuestionEnd />} />
           <Route path="/stepq/scoring" element={<ScoringSheet />} />
+          <Route path='/aa' element={<ChatView />} />
         </Routes>
       </BrowserRouter>
       </Provider>
