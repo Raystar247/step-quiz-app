@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { QGroup, Question, Trial, TrialPostData } from '../type';
+import type { Answer, QGroup, Question, Trial, TrialPostData } from '../type';
 import { ENDPOINT_URL } from '../../../references/util';
 
 const endpointUser = `${ENDPOINT_URL}/user`;
@@ -63,6 +63,21 @@ const stepqApi = {
         };
         const res = await axios.post(endpointAnswer, answerData);
         return res.status == 201;
+    },
+    async fetchPlayerAnswers(qgroupId: string, userId: string): Promise<Answer[]> {
+        const trialId: string = (await axios.get<Trial[]>(endpointTrial, {
+            params: { qgroupId: qgroupId, userId: userId }
+        })).data[0].id;
+        const answers = (await axios.get<Answer[]>(endpointAnswer, {
+            params: { trialId: trialId }
+        })).data;
+        return answers;
+    },
+    async fetchQuestionsOfQGroup(qgroupId: string): Promise<Question[]> {
+        const questions = (await axios.get<Question[]>(endpointQuestion, {
+            params: { qgroupId: qgroupId }
+        })).data;
+        return questions;
     }
 };
 
