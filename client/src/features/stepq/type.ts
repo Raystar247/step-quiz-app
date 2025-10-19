@@ -38,3 +38,5 @@ export type Answer = {
     score: number;
     memo: string;
 };
+
+export type UnitString = 'user' | 'question';

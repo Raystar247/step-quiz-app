@@ -1,6 +1,7 @@
 import axios from 'axios';
-import type { Answer, QGroup, Question, Trial, TrialPostData } from '../type';
+import type { Answer, QGroup, Question, Trial, TrialPostData, UnitString } from '../type';
 import { ENDPOINT_URL } from '../../../references/util';
+import type { User } from '../../users/type';
 
 const endpointUser = `${ENDPOINT_URL}/user`;
 const endpointTrial = `${ENDPOINT_URL}/trial`;
@@ -78,6 +79,35 @@ const stepqApi = {
             params: { qgroupId: qgroupId }
         })).data;
         return questions;
+    },
+    async filterAnswers(unit: UnitString, keyword: string, qgroupId: string): Promise<Answer[]> {
+        let id: string = '';
+        if (unit == 'user') {
+            const userId = (await axios.get<User[]>(endpointUser, {
+                params: { username: keyword }
+            })).data[0].id;
+            id = (await axios.get<Trial[]>(endpointTrial, {
+                params: {
+                    qgroupId: qgroupId,
+                    userId: userId
+                }
+            })).data[0].id
+        } else {
+            id = (await axios.get<Question[]>(endpointQuestion, {
+                params: {
+                    qgroupId: qgroupId,
+                    index: Number(keyword)
+                }
+            })).data[0].id;
+        }
+        const propertyName = `${unit}Id`
+        const answers = (await axios.get<Answer[]>(endpointAnswer, {
+            params: {
+                qgroupId: qgroupId,
+                [propertyName]: id
+            }
+        })).data;
+        return answers;
     }
 };
 
