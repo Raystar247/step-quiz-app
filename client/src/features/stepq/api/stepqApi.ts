@@ -33,7 +33,7 @@ const stepqApi = {
         console.log(res);
         return res.status == 201 ? res.data.id : '';
     },
-    async fetchQuestion(qgroupId: string, index: number): Promise<Question | undefined> {
+    async fetchQuestionByIndex(qgroupId: string, index: number): Promise<Question | undefined> {
         const question = (await axios.get<Question[]>(endpointQuestion, {
             params: { qgroupId: qgroupId, index: index }
         })).data;
