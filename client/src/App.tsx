@@ -8,6 +8,7 @@ import SignUpPage from './features/users/components/SignUpPage'
 import TrialSetting from './features/stepq/components/TrialSetting'
 import StepqMain from './features/stepq/components/Main'
 import QuestionEnd from './features/stepq/components/QuestionEnd'
+import ScoringPage from './features/stepq/components/ScoringPage'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/setting_' element={<TrialSetting />} />
           <Route path='/stepq/:id' element={<StepqMain />} />
           <Route path='/stepq/end' element={<QuestionEnd />} />
+          <Route path='/scoring/:qgroupId' element={<ScoringPage />} />
         </Routes>
       </BrowserRouter>
       </Provider>
