@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import normalTimerframe from "../../../assets/stepq/timerframe_normal.png";
 import warningTimerframe from "../../../assets/stepq/timerframe_warning.png"; 
+import { useNavigate } from "react-router-dom";
 
 
 const Timer: React.FC = () => {
+
+    const navigate = useNavigate();
 
     const timeLimit: number = 1000; // 制限時間
     const warningTime: number = 600;    // 警告表示に変わる残り時間
@@ -47,8 +50,11 @@ const Timer: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        if (elapsed_100ms >= 1000) {
+        if (elapsed_100ms >= timeLimit) {
             stop();
+            navigate("/stepq/end", {
+                state: { key: "timeup" }
+            });
         } else if (timerframe == normalTimerframe && elapsed_100ms >= warningElapsedTime) {
             setTimerframe(warningTimerframe);
         }
