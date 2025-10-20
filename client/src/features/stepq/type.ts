@@ -39,4 +39,11 @@ export type Answer = {
     memo: string;
 };
 
+export type ScoringFormattedAnswer = {
+    index: number;
+    correctAnswer: string;
+    answer: Answer;
+};
+
+
 export type UnitString = 'user' | 'question';

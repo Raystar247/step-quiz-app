@@ -2,15 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ENDPOINT_URL } from "../../../references/util";
 import axios from "axios";
-import type { Answer, Question, Trial, UnitString } from "../type";
+import type { Answer, Question, ScoringFormattedAnswer, Trial, UnitString } from "../type";
 import stepqApi from "../api/stepqApi";
 import SelectHeader from "./SelectHeader";
+import ScoringSheet from "./ScoringSheet";
 
-type ScoringFormattedAnswer = {
-    index: number;
-    correctAnswer: string;
-    answer: Answer;
-};
 
 const ScoringPage = () => {
     const urlParam = useParams<{ qgroupId: string }>();
@@ -50,10 +46,17 @@ const ScoringPage = () => {
     }, [answers]);
 
 
-    return (<SelectHeader
-        qgroupId={urlParam.qgroupId}
-        setAnswers={setAnswers}
-    />);
+    return (
+        <div>
+            <SelectHeader
+                qgroupId={urlParam.qgroupId}
+                setAnswers={setAnswers}
+            />
+            <div>
+                <ScoringSheet formattedAnswers={formattedAnswers} />
+            </div>
+        </div>
+    );
 };
 
 export default ScoringPage;
