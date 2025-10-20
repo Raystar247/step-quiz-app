@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import image_frame from "../../../assets/stepq/timerframe_normal.png";
+import normalTimerframe from "../../../assets/stepq/timerframe_normal.png";
+import warningTimerframe from "../../../assets/stepq/timerframe_warning.png"; 
 import { useNavigate } from "react-router-dom";
 
 
@@ -8,7 +9,10 @@ const Timer: React.FC = () => {
     const navigate = useNavigate();
 
     const timeLimit: number = 1000; // 制限時間
+    const warningTime: number = 600;    // 警告表示に変わる残り時間
+    const warningElapsedTime = timeLimit - warningTime;
     const [elapsed_100ms, setElapsed_100ms] = useState(0);  // 100ms単位の経過時間
+    const [timerframe, setTimerframe] = useState(normalTimerframe);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     // 時間をmm:ss:d形式の文字列に変換する関数
@@ -51,7 +55,9 @@ const Timer: React.FC = () => {
             navigate("/stepq/end", {
                 state: { key: "timeup" }
             });
-        } 
+        } else if (timerframe == normalTimerframe && elapsed_100ms >= warningElapsedTime) {
+            setTimerframe(warningTimerframe);
+        }
     }, [elapsed_100ms]);
 
 
@@ -61,7 +67,7 @@ const Timer: React.FC = () => {
     return (
         <div className="w-full max-w-md flex justify-center mb-3">
             <div className="relative w-[50%] max-w-md flex justify-center">
-                <img src={image_frame} className="w-[100%] h-full" />
+                <img src={timerframe} className="w-[100%] h-full" />
                 <div className="absolute w-full h-full top-[0%] flex items-center justify-center">
                     <p className="text-xl tracking-wide">{displaySeconds}</p>
                 </div>
