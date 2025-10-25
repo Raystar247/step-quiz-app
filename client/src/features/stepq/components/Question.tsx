@@ -16,7 +16,7 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
 
     useEffect(() => {
         const awake = async () => {
-            const q = await stepqApi.fetchQuestion(trial.qgroupId, index);
+            const q = await stepqApi.fetchQuestionByIndex(trial.qgroupId, index);
             setQuestion(q);
         };
         awake();
