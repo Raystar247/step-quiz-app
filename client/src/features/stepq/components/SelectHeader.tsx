@@ -5,10 +5,12 @@ import stepqApi from '../api/stepqApi';
 
 const SelectHeader: React.FC<{
     qgroupId: string | undefined,
-    setAnswers: (v: Answer[]) => void
-}> = ({ qgroupId, setAnswers }) => {
+    setAnswers: (v: Answer[]) => void,
+    unit: UnitString,
+    setUnit: (v: UnitString) => void
+}> = ({ qgroupId, setAnswers, unit, setUnit }) => {
     const [searchText, setSearchText] = useState<string>('');
-    const [unit, setUnit] = useState<UnitString>('user');
+    
 
     const onSearch = async () => {
         if (!qgroupId) { return; }

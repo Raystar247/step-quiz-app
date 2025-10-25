@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import type { ScoringFormattedAnswer } from "../type";
+import type { ScoringFormattedAnswer, UnitString } from "../type";
 
 type Props = {
 	formattedAnswers: ScoringFormattedAnswer[];
 	setFormattedAnswers: React.Dispatch<React.SetStateAction<ScoringFormattedAnswer[]>>;
+	unit: UnitString;
 };
-const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers}) => {
+const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers, unit}) => {
 	// 選択状態: indexごとに 'correct' | 'incorrect' | undefined
 	const [selected, setSelected] = useState<{ [key: number]: 'correct' | 'incorrect' | undefined }>({});
 

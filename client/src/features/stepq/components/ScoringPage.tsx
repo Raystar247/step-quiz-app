@@ -12,6 +12,7 @@ const ScoringPage = () => {
     const urlParam = useParams<{ qgroupId: string }>();
     const [answers, setAnswers] = useState<Answer[]>([]);
     const [formattedAnswers, setFormattedAnswers] = useState<ScoringFormattedAnswer[]>([]);
+    const [unit, setUnit] = useState<UnitString>('user');
 
     // 解答データに問題番号・正解を付与して配列として返す関数
     const formatAnswerForScoring = async (answers: Answer[]): Promise<ScoringFormattedAnswer[]> => {
@@ -50,9 +51,10 @@ const ScoringPage = () => {
             <SelectHeader
                 qgroupId={urlParam.qgroupId}
                 setAnswers={setAnswers}
+                unit={unit} setUnit={setUnit}
             />
             <div>
-                <ScoringSheet formattedAnswers={formattedAnswers} setFormattedAnswers={setFormattedAnswers} />
+                <ScoringSheet formattedAnswers={formattedAnswers} setFormattedAnswers={setFormattedAnswers} unit={unit} />
             </div>
         </div>
     );
