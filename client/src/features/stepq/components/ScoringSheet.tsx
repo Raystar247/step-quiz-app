@@ -1,25 +1,17 @@
-import { useEffect, useState } from "react";
-import type { ScoringFormattedAnswer, UnitString } from "../type";
+import { useEffect } from "react";
+import type { ScoringFormattedAnswer } from "../type";
 
 type Props = {
 	formattedAnswers: ScoringFormattedAnswer[];
 	setFormattedAnswers: React.Dispatch<React.SetStateAction<ScoringFormattedAnswer[]>>;
-	unit: UnitString;
 };
-const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers, unit}) => {
-	// 選択状態: indexごとに 'correct' | 'incorrect' | undefined
-	const [selected, setSelected] = useState<{ [key: number]: 'correct' | 'incorrect' | undefined }>({});
-
+const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers}) => {
+	
 	useEffect(() => {
         setFormattedAnswers(formattedAnswers);
-        setSelected({}); // ←これもリセットしたい場合は追加
     }, [formattedAnswers]);
 	
 		const handleSelect = (rowIndex: number, type: 'correct' | 'incorrect') => {
-			setSelected((prev) => ({
-				...prev,
-				[rowIndex]: prev[rowIndex] === type ? undefined : type,
-			}));
 			setFormattedAnswers((prevRows) => {
 				const newRows = prevRows.map((row) =>
 					row.index === rowIndex
@@ -27,7 +19,8 @@ const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers, u
 								...row,
 								answer: {
 									...row.answer,
-									score: type === 'correct' && selected[rowIndex] !== 'correct' ? 1 : 0
+									score: type === 'correct' && row.answer.scoringStatus !== 'correct' ? 1 : 0,
+									scoringStatus: row.answer.scoringStatus === type ? undefined : type,
 								},
 							}
 						: row
@@ -60,7 +53,7 @@ const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers, u
 												<button
 													type="button"
 													className={`h-10 w-10 rounded-full flex items-center justify-center border-t border-b border-l border-r border-green-100 border-b-green-200 border-t-green-50 border-l-green-100 border-r-green-200 font-bold shadow-sm transition-colors duration-150
-														${selected[row.index] === 'correct' ? 'bg-gradient-to-tl from-green-200 via-green-100 to-green-50 text-green-700' : 'bg-white text-green-600'}`}
+														${row.answer.scoringStatus === 'correct' ? 'bg-gradient-to-tl from-green-200 via-green-100 to-green-50 text-green-700' : 'bg-white text-green-600'}`}
 													aria-label="Correct"
 													onClick={() => handleSelect(row.index, 'correct')}
 												>
@@ -69,7 +62,7 @@ const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers, u
 												<button
 													type="button"
 													className={`h-10 w-10 rounded-full flex items-center justify-center border-t border-b border-l border-r border-red-100 border-b-red-200 border-t-red-50 border-l-red-100 border-r-red-200 font-bold shadow-sm transition-colors duration-150
-														${selected[row.index] === 'incorrect' ? 'bg-gradient-to-tl from-red-200 via-red-100 to-red-50 text-red-700' : 'bg-white text-red-600'}`}
+														${row.answer.scoringStatus === 'incorrect' ? 'bg-gradient-to-tl from-red-200 via-red-100 to-red-50 text-red-700' : 'bg-white text-red-600'}`}
 													aria-label="Incorrect"
 													onClick={() => handleSelect(row.index, 'incorrect')}
 												>
