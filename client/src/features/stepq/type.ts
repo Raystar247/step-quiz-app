@@ -36,6 +36,7 @@ export type Answer = {
     questionId: string;
     answer: string;
     score: number;
+    scoringStatus: 'correct' | 'incorrect' | undefined;
     memo: string;
 };
 

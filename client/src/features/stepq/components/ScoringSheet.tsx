@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import type { ScoringFormattedAnswer } from "../type";
 
-const ScoringSheet: React.FC<{formattedAnswers: ScoringFormattedAnswer[]}> = ({formattedAnswers}) => {
+type Props = {
+	formattedAnswers: ScoringFormattedAnswer[];
+	setFormattedAnswers: React.Dispatch<React.SetStateAction<ScoringFormattedAnswer[]>>;
+};
+const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers}) => {
 	// 選択状態: indexごとに 'correct' | 'incorrect' | undefined
 	const [selected, setSelected] = useState<{ [key: number]: 'correct' | 'incorrect' | undefined }>({});
-	const [rows, setRows] = useState<ScoringFormattedAnswer[]>(formattedAnswers);
 
 	useEffect(() => {
-        setRows(formattedAnswers);
+        setFormattedAnswers(formattedAnswers);
         setSelected({}); // ←これもリセットしたい場合は追加
     }, [formattedAnswers]);
 	
@@ -16,7 +19,7 @@ const ScoringSheet: React.FC<{formattedAnswers: ScoringFormattedAnswer[]}> = ({f
 				...prev,
 				[rowIndex]: prev[rowIndex] === type ? undefined : type,
 			}));
-			setRows((prevRows) => {
+			setFormattedAnswers((prevRows) => {
 				const newRows = prevRows.map((row) =>
 					row.index === rowIndex
 						? {
@@ -47,7 +50,7 @@ const ScoringSheet: React.FC<{formattedAnswers: ScoringFormattedAnswer[]}> = ({f
 									</tr>
 								</thead>
 								<tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
-									{rows.map((row) => (
+									{formattedAnswers.map((row) => (
 										<tr key={row.index} className="hover:bg-gray-100 dark:hover:bg-neutral-700">
 											<td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">{row.index}</td>
 											<td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">{row.answer.answer}</td>
@@ -81,7 +84,7 @@ const ScoringSheet: React.FC<{formattedAnswers: ScoringFormattedAnswer[]}> = ({f
 				</div>
 				{/* 合計スコア表示 */}
 				<div className="mt-4 text-right text-base font-semibold text-gray-700 dark:text-neutral-200">
-					合計スコア: {rows.reduce((sum, row) => sum + row.answer.score, 0)}
+					合計スコア: {formattedAnswers.reduce((sum, row) => sum + row.answer.score, 0)}
 				</div>
 			</div>
 		);

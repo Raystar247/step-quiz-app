@@ -60,6 +60,7 @@ const stepqApi = {
             questionId: questionId,
             answer: answerText,
             score: 0,
+            scoringStatus: undefined,
             memo: ""
         };
         const res = await axios.post(endpointAnswer, answerData);

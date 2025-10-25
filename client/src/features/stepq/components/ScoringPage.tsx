@@ -10,7 +10,6 @@ import ScoringSheet from "./ScoringSheet";
 
 const ScoringPage = () => {
     const urlParam = useParams<{ qgroupId: string }>();
-    const [unit, setUnit] = useState<UnitString>('user');
     const [answers, setAnswers] = useState<Answer[]>([]);
     const [formattedAnswers, setFormattedAnswers] = useState<ScoringFormattedAnswer[]>([]);
 
@@ -53,7 +52,7 @@ const ScoringPage = () => {
                 setAnswers={setAnswers}
             />
             <div>
-                <ScoringSheet formattedAnswers={formattedAnswers} />
+                <ScoringSheet formattedAnswers={formattedAnswers} setFormattedAnswers={setFormattedAnswers} />
             </div>
         </div>
     );
