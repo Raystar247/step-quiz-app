@@ -109,6 +109,15 @@ const stepqApi = {
             }
         })).data;
         return answers;
+    },
+    async fetchUserByAnswer(answer: Answer): Promise<User> {
+        const trial = (await axios.get<Trial[]>(endpointTrial, {
+            params: { id: answer.trialId }
+        })).data[0];
+        const user = (await axios.get<User[]>(endpointUser, {
+            params: { id: trial.userId }
+        })).data[0];
+        return user;
     }
 };
 

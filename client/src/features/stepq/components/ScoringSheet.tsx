@@ -53,7 +53,7 @@ const ScoringSheet: React.FC<Props> = ({formattedAnswers, setFormattedAnswers, u
 								<tbody className="divide-y divide-gray-200 dark:divide-neutral-700">
 									{formattedAnswers.map((row) => (
 										<tr key={row.index} className="hover:bg-gray-100 dark:hover:bg-neutral-700">
-											<td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">{row.index}</td>
+											<td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-neutral-200">{row.displayKey}</td>
 											<td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">{row.answer.answer}</td>
 											<td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-neutral-200">{row.correctAnswer}</td>
 											<td className="px-4 py-2 whitespace-nowrap text-end text-sm font-medium flex gap-2 justify-end">

@@ -6,6 +6,7 @@ import type { Answer, Question, ScoringFormattedAnswer, Trial, UnitString } from
 import stepqApi from "../api/stepqApi";
 import SelectHeader from "./SelectHeader";
 import ScoringSheet from "./ScoringSheet";
+import type { User } from "../../users/type";
 
 
 const ScoringPage = () => {
@@ -17,21 +18,27 @@ const ScoringPage = () => {
     // 解答データに問題番号・正解を付与して配列として返す関数
     const formatAnswerForScoring = async (answers: Answer[]): Promise<ScoringFormattedAnswer[]> => {
         // 解答データに問題番号・正解を付与する内部関数
-        const addInfo = (ans: Answer, questions: Question[]): ScoringFormattedAnswer => {
+        const addInfo = async (ans: Answer, questions: Question[]): Promise<ScoringFormattedAnswer> => {
             const question: Question | undefined = questions.find(_q => _q.id == ans.questionId);
-            if (!question) { return { index: -1, correctAnswer: '', answer: ans }; }  // エラー回避用ダミー
+            if (!question) { return { index: -1, qindex: -1, displayKey: '', correctAnswer: '', username: '', answer: ans }; }  // エラー回避用ダミー
+            const user: User = await stepqApi.fetchUserByAnswer(ans);
             const formattedData: ScoringFormattedAnswer = {
-                index: question.index,
+                index: ans.id ? parseInt(ans.id.slice(-4), 16) : -1,  // Sheetのkey用index
+                qindex: question.index,
+                displayKey: unit == 'user' ? question.index : user.username,
                 correctAnswer: question.correctAnswer,
+                username: user.username,
                 answer: ans
-            };
+            };  
             return formattedData;
         }
 
         if (!urlParam.qgroupId) { return []; }
         const allQuestions = await stepqApi.fetchQuestionsOfQGroup(urlParam.qgroupId);
         if (!allQuestions) { return []; }
-        const formattedAnswers = answers.map(ans => addInfo(ans, allQuestions));
+        const formattedAnswers = await Promise.all(
+            answers.map(async ans => await addInfo(ans, allQuestions))
+        );
         return formattedAnswers;
     };
 

@@ -42,7 +42,10 @@ export type Answer = {
 
 export type ScoringFormattedAnswer = {
     index: number;
+    qindex: number;
+    displayKey: number | string;
     correctAnswer: string;
+    username: string;
     answer: Answer;
 };
 
