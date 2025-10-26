@@ -92,7 +92,7 @@ const stepqApi = {
                     qgroupId: qgroupId,
                     userId: userId
                 }
-            })).data[0].id
+            })).data[0].id;
         } else {
             id = (await axios.get<Question[]>(endpointQuestion, {
                 params: {
@@ -101,7 +101,7 @@ const stepqApi = {
                 }
             })).data[0].id;
         }
-        const propertyName = `${unit}Id`
+        const propertyName = unit == 'user' ? 'trialId' : 'questionId';
         const answers = (await axios.get<Answer[]>(endpointAnswer, {
             params: {
                 qgroupId: qgroupId,
