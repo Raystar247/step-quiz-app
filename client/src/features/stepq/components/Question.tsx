@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { QGroup, Question, Trial } from "../type";
 import stepqApi from "../api/stepqApi";
 import { useNavigate } from "react-router-dom";
+import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
 
 type Props = {
     trial: Trial;
@@ -53,24 +54,27 @@ const QuestionComponent: React.FC<Props> = ({ trial, index, setIndex }) => {
     };
 
     return (
-        <div className="w-full max-w-md bg-white shadow-md p-4 space-y-6">
+        <LiquidGlass as="div" colorScheme="white" hoverEffect={false} className="w-full max-w-md bg-white shadow-md p-8 space-y-6">
             <div>
                 第 <span className="font-semibold text-lg">{index}</span> 問
             </div>
-            <div className="shadow-sm rounded-sm p-2 text-left border-l-2 border-cyan-300">
+            <div className="shadow-sm rounded-sm p-2 text-left border-l-3 border-cyan-300">
                 {question.questionText}
             </div>
             <form onSubmit={handleSubmit}>
-                <input 
-                    type="text" 
+                <LiquidGlass as="input"
+                    colorScheme="lightGray"
+                    shape="square"
+                    type="text"
+                    autoComplete="off"
                     id="answer" name="answer"
                     placeholder="answer"
                     value={answer}
                     onChange={handleChange}
-                    className="w-full py-2 border-b focus:outline-none focus:border-b-2 focus:border-indigo-500 placeholder-gray-500 placeholder-opacity-50"
+                    className="w-full py-2 border-b focus:outline-none focus:border-b-2 focus:border-indigo-500 placeholder-gray-500 placeholder-opacity-50 mb-3"
                 />
             </form>
-        </div>
+        </LiquidGlass>
     );
 };
 
