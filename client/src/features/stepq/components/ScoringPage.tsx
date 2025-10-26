@@ -8,6 +8,7 @@ import SelectHeader from "./SelectHeader";
 import ScoringSheet from "./ScoringSheet";
 import type { User } from "../../users/type";
 import LiquidGlassButton from "./exampleButton";
+import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
 
 
 const ScoringPage = () => {
@@ -43,6 +44,12 @@ const ScoringPage = () => {
         return formattedAnswers;
     };
 
+    const savedAnswersScored = async () => {
+        for (const formattedAnswer of formattedAnswers) {
+            await stepqApi.updateAnswerScored(formattedAnswer.answer);
+        }
+    };
+
     useEffect(() => {
         const f = async () => {
             const formatted = await formatAnswerForScoring(answers);
@@ -69,9 +76,9 @@ return (
         </div>
 
         {/* 保存ボタンも中央に */}
-        <LiquidGlassButton colorScheme="purple">
+        <LiquidGlass as="button" colorScheme="purple" onClick={async () => await savedAnswersScored()}>
             保存する
-        </LiquidGlassButton>
+        </LiquidGlass>
     </div>
 );
 };

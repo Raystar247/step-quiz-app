@@ -118,6 +118,10 @@ const stepqApi = {
             params: { id: trial.userId }
         })).data[0];
         return user;
+    },
+    async updateAnswerScored(answer: Answer): Promise<boolean> {
+        const res = await axios.put(`${endpointAnswer}/${answer.id}`, answer);
+        return res.status == 200;
     }
 };
 
