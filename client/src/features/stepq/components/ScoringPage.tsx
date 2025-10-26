@@ -7,6 +7,7 @@ import stepqApi from "../api/stepqApi";
 import SelectHeader from "./SelectHeader";
 import ScoringSheet from "./ScoringSheet";
 import type { User } from "../../users/type";
+import LiquidGlassButton from "./exampleButton";
 
 
 const ScoringPage = () => {
@@ -53,18 +54,26 @@ const ScoringPage = () => {
     }, [answers]);
 
 
-    return (
-        <div>
-            <SelectHeader
-                qgroupId={urlParam.qgroupId}
-                setAnswers={setAnswers}
-                unit={unit} setUnit={setUnit}
-            />
-            <div>
-                <ScoringSheet formattedAnswers={formattedAnswers} setFormattedAnswers={setFormattedAnswers} unit={unit} />
-            </div>
+return (
+    <div className="flex flex-col items-center px-4 py-6 space-y-6">
+        {/* 横中央に配置 + 下にスペース */}
+        <SelectHeader
+            qgroupId={urlParam.qgroupId}
+            setAnswers={setAnswers}
+            unit={unit} setUnit={setUnit}
+        />
+
+        {/* 表は横幅を画面に合わせて中央配置 */}
+        <div className="w-full max-w-5xl">
+            <ScoringSheet formattedAnswers={formattedAnswers} setFormattedAnswers={setFormattedAnswers} />
         </div>
-    );
+
+        {/* 保存ボタンも中央に */}
+        <LiquidGlassButton colorScheme="purple">
+            保存する
+        </LiquidGlassButton>
+    </div>
+);
 };
 
 export default ScoringPage;
