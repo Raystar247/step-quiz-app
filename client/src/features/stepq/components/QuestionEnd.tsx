@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { finishMessages } from "../static/messages";
+import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
 
 const QuestionEnd: React.FC = () => {
     const location = useLocation();
@@ -8,11 +9,11 @@ const QuestionEnd: React.FC = () => {
     const message = state.key == undefined ? finishMessages["unknown"] : finishMessages[state.key];
 
     return (
-        <div className="w-full max-w-md bg-white shadow-md p-4 space-y-6">
+        <LiquidGlass as="div" colorScheme="orange" hoverEffect={false} className="w-full max-w-md p-6">
             <div className="whitespace-pre-line">
                 {message}
             </div>
-        </div>
+        </LiquidGlass>
     );
 };
 

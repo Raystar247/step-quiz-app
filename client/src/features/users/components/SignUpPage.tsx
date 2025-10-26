@@ -5,6 +5,7 @@ import { z } from "zod";
 import { type AppDispatch, type RootState, useSelector } from "../../../stores";
 import type { SignUpData } from "../type";
 import userApi from "../api/userApi";
+import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
 
 // Zodスキーマ定義
 const signUpSchema = z.object({
@@ -57,12 +58,12 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (userInfo.isSignedIn) {
-      navigate("/user");
+      navigate("/setting_");
     }
   }, [userInfo]);
 
   return (
-    <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
+    <LiquidGlass as="div" colorScheme="white" className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
       <div>
         <h2 className="text-center text-2xl font-bold text-gray-800">
           Sign up
@@ -124,12 +125,12 @@ const SignUpPage = () => {
           {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
         </div>
 
-        <button
+        <LiquidGlass
           type="submit"
           className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-200"
         >
           Sign up
-        </button>
+        </LiquidGlass>
       </form>
 
       <div className="text-center text-sm text-gray-600">
@@ -138,7 +139,7 @@ const SignUpPage = () => {
           ログイン
         </a>
       </div>
-    </div>
+    </LiquidGlass>
   );
 };
 

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import type { QGroup, Question, Trial, TrialPostData } from '../type';
+import type { Answer, QGroup, Question, Trial, TrialPostData, UnitString } from '../type';
 import { ENDPOINT_URL } from '../../../references/util';
+import type { User } from '../../users/type';
 
 const endpointUser = `${ENDPOINT_URL}/user`;
 const endpointTrial = `${ENDPOINT_URL}/trial`;
@@ -32,7 +33,7 @@ const stepqApi = {
         console.log(res);
         return res.status == 201 ? res.data.id : '';
     },
-    async fetchQuestion(qgroupId: string, index: number): Promise<Question | undefined> {
+    async fetchQuestionByIndex(qgroupId: string, index: number): Promise<Question | undefined> {
         const question = (await axios.get<Question[]>(endpointQuestion, {
             params: { qgroupId: qgroupId, index: index }
         })).data;
@@ -59,10 +60,68 @@ const stepqApi = {
             questionId: questionId,
             answer: answerText,
             score: 0,
+            scoringStatus: undefined,
             memo: ""
         };
         const res = await axios.post(endpointAnswer, answerData);
         return res.status == 201;
+    },
+    async fetchPlayerAnswers(qgroupId: string, userId: string): Promise<Answer[]> {
+        const trialId: string = (await axios.get<Trial[]>(endpointTrial, {
+            params: { qgroupId: qgroupId, userId: userId }
+        })).data[0].id;
+        const answers = (await axios.get<Answer[]>(endpointAnswer, {
+            params: { trialId: trialId }
+        })).data;
+        return answers;
+    },
+    async fetchQuestionsOfQGroup(qgroupId: string): Promise<Question[]> {
+        const questions = (await axios.get<Question[]>(endpointQuestion, {
+            params: { qgroupId: qgroupId }
+        })).data;
+        return questions;
+    },
+    async filterAnswers(unit: UnitString, keyword: string, qgroupId: string): Promise<Answer[]> {
+        let id: string = '';
+        if (unit == 'user') {
+            const userId = (await axios.get<User[]>(endpointUser, {
+                params: { username: keyword }
+            })).data[0].id;
+            id = (await axios.get<Trial[]>(endpointTrial, {
+                params: {
+                    qgroupId: qgroupId,
+                    userId: userId
+                }
+            })).data[0].id;
+        } else {
+            id = (await axios.get<Question[]>(endpointQuestion, {
+                params: {
+                    qgroupId: qgroupId,
+                    index: Number(keyword)
+                }
+            })).data[0].id;
+        }
+        const propertyName = unit == 'user' ? 'trialId' : 'questionId';
+        const answers = (await axios.get<Answer[]>(endpointAnswer, {
+            params: {
+                qgroupId: qgroupId,
+                [propertyName]: id
+            }
+        })).data;
+        return answers;
+    },
+    async fetchUserByAnswer(answer: Answer): Promise<User> {
+        const trial = (await axios.get<Trial[]>(endpointTrial, {
+            params: { id: answer.trialId }
+        })).data[0];
+        const user = (await axios.get<User[]>(endpointUser, {
+            params: { id: trial.userId }
+        })).data[0];
+        return user;
+    },
+    async updateAnswerScored(answer: Answer): Promise<boolean> {
+        const res = await axios.put(`${endpointAnswer}/${answer.id}`, answer);
+        return res.status == 200;
     }
 };
 

@@ -36,5 +36,18 @@ export type Answer = {
     questionId: string;
     answer: string;
     score: number;
+    scoringStatus: 'correct' | 'incorrect' | undefined;
     memo: string;
 };
+
+export type ScoringFormattedAnswer = {
+    index: number;
+    qindex: number;
+    displayKey: number | string;
+    correctAnswer: string;
+    username: string;
+    answer: Answer;
+};
+
+
+export type UnitString = 'user' | 'question';
