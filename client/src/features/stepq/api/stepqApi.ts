@@ -67,6 +67,7 @@ const stepqApi = {
         return res.status == 201;
     },
     async fetchPlayerAnswers(qgroupId: string, userId: string): Promise<Answer[]> {
+        if (qgroupId == '' || userId == '') { return []; }
         const trialId: string = (await axios.get<Trial[]>(endpointTrial, {
             params: { qgroupId: qgroupId, userId: userId }
         })).data[0].id;
