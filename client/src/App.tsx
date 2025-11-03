@@ -10,6 +10,7 @@ import StepqMain from './features/stepq/components/Main'
 import QuestionEnd from './features/stepq/components/QuestionEnd'
 import ScoringPage from './features/stepq/components/ScoringPage'
 import App0 from './features/stepq/components/a'
+import ScoredPage from './features/stepq/components/ScoredPage'
 
 function App() {
 
@@ -26,7 +27,7 @@ function App() {
           <Route path='/stepq/:id' element={<StepqMain />} />
           <Route path='/stepq/end' element={<QuestionEnd />} />
           <Route path='/scoring/:qgroupId' element={<ScoringPage />} />
-          <Route path='/sample' element=<App0 /> />
+          <Route path='/scored/:qgroupId' element={<ScoredPage />} />
         </Routes>
       </BrowserRouter>
       </Provider>
