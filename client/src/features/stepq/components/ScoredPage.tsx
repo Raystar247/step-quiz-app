@@ -5,6 +5,7 @@ import stepqApi from "../api/stepqApi";
 import SelectHeader from "./SelectHeader";
 import type { User } from "../../users/type";
 import ScoreResult from "./ScoreResult";
+import { useSelector, type RootState } from "../../../stores";
 
 const ScoredPage = () => {
   const urlParam = useParams<{ qgroupId: string }>();
@@ -12,8 +13,10 @@ const ScoredPage = () => {
   const [formattedAnswers, setFormattedAnswers] = useState<ScoringFormattedAnswer[]>([]);
   const [unit, setUnit] = useState<UnitString>("user");
 
+  const userId = useSelector((state: RootState) => state.user.id);
+
   // 解答データ整形
-  const formatAnswerForScoring = async (answers: Answer[]): Promise<ScoringFormattedAnswer[]> => {
+  const formatAnswer = async (answers: Answer[]): Promise<ScoringFormattedAnswer[]> => {
     const addInfo = async (ans: Answer, questions: Question[]): Promise<ScoringFormattedAnswer> => {
       const question = questions.find((_q) => _q.id === ans.questionId);
       if (!question)
@@ -45,11 +48,13 @@ const ScoredPage = () => {
 
   useEffect(() => {
     const f = async () => {
-      const formatted = await formatAnswerForScoring(answers);
-      setFormattedAnswers(formatted);
+        if (!urlParam.qgroupId) { return; }
+        const playerAnswers = await stepqApi.fetchPlayerAnswers(urlParam.qgroupId, userId);
+        const fmtAnswers = await formatAnswer(playerAnswers);
+        setFormattedAnswers(fmtAnswers);
     };
     f();
-  }, [answers]);
+  }, []);
 
   return (
     <div
