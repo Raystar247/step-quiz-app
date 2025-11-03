@@ -63,7 +63,7 @@ const SignUpPage = () => {
   }, [userInfo]);
 
   return (
-    <LiquidGlass as="div" colorScheme="white" className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
+    <LiquidGlass as="div" colorScheme="white" centerContent={false} className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
       <div>
         <h2 className="text-center text-2xl font-bold text-gray-800">
           Sign up

@@ -123,7 +123,14 @@ interface LiquidGlassBaseProps {
   width?: string | number;
   height?: string | number;
   style?: React.CSSProperties;
+
+  /** 🎯 コンテンツを中央に配置するか（デフォルト: true） */
+  centerContent?: boolean;
+
+  /** 🧩 内側のpaddingを消す（デフォルト: false） */
+  noPadding?: boolean;
 }
+
 
 /**
  * 💡 全HTML要素に対応する属性型を抽出するユーティリティ
@@ -156,6 +163,8 @@ const LiquidGlass = <T extends keyof JSX.IntrinsicElements = 'button'>({
   height,
   style,
   children,
+  centerContent = true,  // ✅ デフォルト値つきで追加
+  noPadding = false,     // ✅ デフォルト値つきで追加
   ...rest
 }: LiquidGlassProps<T>) => {
   const Component = (as || 'button') as keyof JSX.IntrinsicElements;
@@ -189,33 +198,39 @@ const LiquidGlass = <T extends keyof JSX.IntrinsicElements = 'button'>({
     aspectRatioStyle = { aspectRatio: '1 / 1' };
   }
 
-  const baseStyle: React.CSSProperties = {
-    display: defaultDisplayMap[Component] || 'inline-flex',
+const baseStyle: React.CSSProperties = {
+  display: centerContent ? 'inline-flex' : defaultDisplayMap[Component] || 'inline-block',
+  ...(centerContent && {
     alignItems: 'center',
     justifyContent: 'center',
-    padding:
-      Component === 'input' || Component === 'textarea'
+  }),
+  padding: noPadding
+    ? 0
+    : shape === 'circle'
+      ? 0
+      : Component === 'input' || Component === 'textarea'
         ? '0.5rem 1rem'
         : '0.5rem 1.5rem',
-    fontWeight: 'normal',
-    color: palette.textColorBase,
-    background: palette.baseGradient,
-    borderTop: '1px solid rgba(255,255,255,0.3)',
-    borderRight: '0.5px solid rgba(255,255,255,0.15)',
-    borderBottom: palette.borderBottom,
-    borderLeft: '0.5px solid rgba(255,255,255,0.15)',
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    boxShadow: palette.boxShadowBase,
-    transition: 'all 0.35s ease',
-    cursor: isClickable ? 'pointer' : 'default',
-    textShadow: palette.textShadowBase,
-    width: finalWidth,
-    height: finalHeight,
-    borderRadius: shape === 'circle' ? '50%' : shapeStyles[shape].borderRadius,
-    ...aspectRatioStyle, // ✅ circle のみ aspect-ratio を適用
-    ...style,
-  };
+  fontWeight: 'normal',
+  color: palette.textColorBase,
+  background: palette.baseGradient,
+  borderTop: '1px solid rgba(255,255,255,0.3)',
+  borderRight: '0.5px solid rgba(255,255,255,0.15)',
+  borderBottom: palette.borderBottom,
+  borderLeft: '0.5px solid rgba(255,255,255,0.15)',
+  backdropFilter: 'blur(12px)',
+  WebkitBackdropFilter: 'blur(12px)',
+  boxShadow: palette.boxShadowBase,
+  transition: 'all 0.35s ease',
+  cursor: isClickable ? 'pointer' : 'default',
+  textShadow: palette.textShadowBase,
+  width: finalWidth,
+  height: finalHeight,
+  borderRadius: shape === 'circle' ? '50%' : shapeStyles[shape].borderRadius,
+  ...aspectRatioStyle,
+  ...style,
+};
+
 
   const handleMouseOver = (e: React.MouseEvent<HTMLElement>) => {
     if (!hoverEffect) return;
