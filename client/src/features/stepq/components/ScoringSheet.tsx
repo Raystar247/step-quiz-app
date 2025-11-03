@@ -82,6 +82,7 @@ const ScoringSheet: React.FC<Props> = ({ formattedAnswers, setFormattedAnswers }
 												onClick={() => handleSelect(row.index, "correct")}
 												style={{ boxSizing: "border-box", padding: 0 }}
 												aria-label="Correct"
+                                                centerContent
 											>
 												○
 											</LiquidGlass>
@@ -91,6 +92,7 @@ const ScoringSheet: React.FC<Props> = ({ formattedAnswers, setFormattedAnswers }
 												colorScheme={row.answer.scoringStatus === "incorrect" ? "red" : "lightGray"}
 												onClick={() => handleSelect(row.index, "incorrect")}
 												style={{ boxSizing: "border-box", padding: 0 }}
+                                                centerContent
 												aria-label="Incorrect"
 											>
 												×

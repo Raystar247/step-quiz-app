@@ -36,7 +36,7 @@ const Main: React.FC = () => {
         return <p>エラー発生！</p>
     }
     return (
-        <div>
+        <div className="mt-10">
             <Timer />
             <Question trial={trial} index={index} setIndex={setIndex} />
         </div>

@@ -9,7 +9,7 @@ const QuestionEnd: React.FC = () => {
     const message = state.key == undefined ? finishMessages["unknown"] : finishMessages[state.key];
 
     return (
-        <LiquidGlass as="div" colorScheme="orange" hoverEffect={false} className="w-full max-w-md p-6">
+        <LiquidGlass as="div" colorScheme="orange" hoverEffect={false} className="w-full max-w-md p-6 mt-10">
             <div className="whitespace-pre-line">
                 {message}
             </div>

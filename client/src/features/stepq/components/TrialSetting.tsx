@@ -25,6 +25,11 @@ const TrialSetting: React.FC = () => {
         navigate(`/stepq/${str}`);
     };
 
+    const handleConfirm = async () => {
+      const id = await stepqApi.fetchQuestionGroupId(form.keyword);
+      navigate(`/scored/${id}`);
+    }
+
     return (
         <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
           <div>
@@ -70,6 +75,13 @@ const TrialSetting: React.FC = () => {
               className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-200"
             >
               Start
+            </button>
+            <button
+              type="button"
+              onClick={() => { handleConfirm(); }}
+              className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-200"
+            >
+              Confirm
             </button>
           </form>
         </div>
