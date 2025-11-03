@@ -5,13 +5,6 @@
   text-align: center;
 }
 
-/* スマホ向け（幅768px以下） */
-@media (max-width: 768px) {
-  #root {
-    padding: 0;
-  }
-}
-
 
 .logo {
   height: 6em;

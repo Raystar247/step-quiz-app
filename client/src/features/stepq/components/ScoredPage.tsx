@@ -65,19 +65,12 @@ const ScoredPage = () => {
         min-h-screen
         box-border
         overflow-x-hidden
-        px-[2vw]
+        px-4
         py-6
         space-y-6
         dark:bg-neutral-900
       "
     >
-      <SelectHeader
-        qgroupId={urlParam.qgroupId}
-        setAnswers={setAnswers}
-        unit={unit}
-        setUnit={setUnit}
-      />
-
       <div className="w-full sm:max-w-3xl md:max-w-4xl lg:max-w-5xl">
         <ScoreResult formattedAnswers={formattedAnswers} />
       </div>
