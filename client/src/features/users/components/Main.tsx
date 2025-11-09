@@ -11,12 +11,12 @@ const Main = () => {
 
     useEffect(() =>  {
         const getUser = async () => {
-            const id = sessionStorage.getItem("userId_");
-            if (!id) {
-                console.error("User IDが見つかりません");
-                return;
-            }
-            const _user = await userApi.getUserInfo(id);
+            // const id = sessionStorage.getItem("userId_");
+            // if (!id) {
+            //     console.error("User IDが見つかりません");
+            //     return;
+            // }
+            const _user = await userApi.getUserInfo(userId);
             setUser(_user);
         };
         getUser();
