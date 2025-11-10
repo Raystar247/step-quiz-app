@@ -10,13 +10,14 @@ import StepqMain from './features/stepq/components/Main'
 import QuestionEnd from './features/stepq/components/QuestionEnd'
 import ScoringPage from './features/stepq/components/ScoringPage'
 import App0 from './features/stepq/components/a'
+import ScoredPage from './features/stepq/components/ScoredPage'
 import { PersistGate } from 'redux-persist/integration/react'
 
 function App() {
 
   return (
     <>
-    <div className='flex justify-center items-center mt-10'>
+    <div className='flex justify-center items-center mt-1'>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
@@ -28,7 +29,7 @@ function App() {
               <Route path='/stepq/:id' element={<StepqMain />} />
               <Route path='/stepq/end' element={<QuestionEnd />} />
               <Route path='/scoring/:qgroupId' element={<ScoringPage />} />
-              <Route path='/sample' element=<App0 /> />
+              <Route path='/scored/:qgroupId' element={<ScoredPage />} />
             </Routes>
           </BrowserRouter>
         </PersistGate>

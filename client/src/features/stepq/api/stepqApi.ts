@@ -67,6 +67,7 @@ const stepqApi = {
         return res.status == 201;
     },
     async fetchPlayerAnswers(qgroupId: string, userId: string): Promise<Answer[]> {
+        if (qgroupId == '' || userId == '') { return []; }
         const trialId: string = (await axios.get<Trial[]>(endpointTrial, {
             params: { qgroupId: qgroupId, userId: userId }
         })).data[0].id;
@@ -122,6 +123,13 @@ const stepqApi = {
     async updateAnswerScored(answer: Answer): Promise<boolean> {
         const res = await axios.put(`${endpointAnswer}/${answer.id}`, answer);
         return res.status == 200;
+    },
+    async fetchQuestionGroupId(keyword: string): Promise<string> {
+        const res = (await axios.get<QGroup[]>(endpointQgroup, {
+            params: { title: keyword }
+        })).data;
+        if (res.length == 0) { return ''; }
+        return res[0].id;
     }
 };
 
