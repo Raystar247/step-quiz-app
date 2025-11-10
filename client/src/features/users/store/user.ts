@@ -4,6 +4,7 @@ import userApi from "../api/userApi";
 import type { AxiosError } from "axios";
 import persistReducer from "redux-persist/es/persistReducer";
 import storage from "redux-persist/lib/storage";
+import sessionStorage from "redux-persist/lib/storage/session";
 
 
 const user = createSlice({
@@ -51,7 +52,7 @@ export { signInAsync };
 
 const persistConfig = {
     key: "user",
-    storage: storage
+    storage: sessionStorage
 };
 
 const persistedUserReducer = persistReducer(persistConfig, user.reducer);
