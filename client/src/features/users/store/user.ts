@@ -2,6 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { SignInData, SignInResponse } from "../type";
 import userApi from "../api/userApi";
 import type { AxiosError } from "axios";
+import persistReducer from "redux-persist/es/persistReducer";
+import storage from "redux-persist/lib/storage";
+import sessionStorage from "redux-persist/lib/storage/session";
+
 
 const user = createSlice({
     name: 'user',
@@ -39,10 +43,17 @@ const signInAsync = createAsyncThunk<SignInResponse, SignInData>(
             return res;
         } catch (error) {
             const axiosError = error as AxiosError;
-            return rejectWithValue(axiosError.response?.data || axiosError.message);
+            return rejectWithValue(axiosError.response?.data?.message || axiosError.message);
         }
     }
 );
 
 export { signInAsync };
-export default user.reducer;
+
+const persistConfig = {
+    key: "user",
+    storage: sessionStorage
+};
+
+const persistedUserReducer = persistReducer(persistConfig, user.reducer);
+export default persistedUserReducer;
