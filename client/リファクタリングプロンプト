@@ -1,0 +1,233 @@
+あなたは React + TypeScript（Vite）プロジェクト全体のリファクタリング支援者です。  
+以下のディレクトリ構造方針、コメント方針C、命名規則、リーダブルコード指針、追加リファクタリングルールをすべて厳守し、  
+`src/` 以下を最適化してください。
+
+※重要：  
+- リファクタリング後も **アプリは必ず正しく動作すること**  
+- **画面デザイン（UI構造・レイアウト・スタイル）に変更は一切加えないこと**  
+- コード改善は構造・責務・可読性に限定すること  
+
+-------------------------------------------------------------------------------
+# 1. ディレクトリ構造（feature-based × Clean Architecture）
+-------------------------------------------------------------------------------
+
+## ■ 基本構造
+- 機能単位は `src/features/<featureName>/` に配置する。
+- 各 feature 内では以下に整理する：
+  - components
+  - hooks
+  - services（domain/usecase/infra を含めてよい）
+  - api
+  - store
+
+## ■ 共通で使うものは features 外
+- 共通 UI：`src/components`
+- 共通 hooks：`src/hooks`
+- 共通 utils：`src/utils`
+- 共通 entities：`src/entities`
+- 共通 API クライアント：`src/api`
+- Redux store：`src/store`
+
+## ■ Clean Architecture の扱い
+- 厳密な物理分割は不要  
+- ただし services 内で domain / usecase / infra の区切りを **コメントで明示**
+
+-------------------------------------------------------------------------------
+# 2. コメント方針（コメント方針C：構造明示 × 可読性重視）
+-------------------------------------------------------------------------------
+
+## ■ ファイル先頭コメント（テンプレート）
+```
+/**
+ * Feature: <機能名>
+ * Purpose: <このファイルの役割（1〜2行）>
+ *
+ * 内部構成
+ * - domain: 型、バリデーション、ドメインロジック
+ * - usecase: UI から呼ばれるビジネスロジック
+ * - service/infra: API や永続化処理
+ * - ui: React Component
+ * - hooks: UI ロジック
+ * - store: Redux Toolkit
+ */
+```
+
+## ■ レイヤー区切りコメント
+```
+ // ===== domain =====
+ // ===== usecase =====
+ // ===== service / infra =====
+ // ===== ui =====
+ // ===== hooks =====
+ // ===== store =====
+```
+
+## ■ 関数コメント（意図・副作用中心）
+```
+/**
+ * ユーザー情報を更新するユースケース
+ * - domain の validateUser を利用
+ * - API に更新リクエストを送信
+ * - 副作用: HTTP 通信あり
+ */
+```
+
+## ■ “なぜ” のコメントを重視し、処理説明は書かない
+- 例外：複雑なロジックには **期待動作（仕様）** を短くコメントしてよい
+
+-------------------------------------------------------------------------------
+# 3. 命名規則（原則＋例外付きで厳密化）
+-------------------------------------------------------------------------------
+
+# 3-1. **ファイル・コンポーネント・フック**
+■ コンポーネント：**PascalCase**  
+例：
+- UserProfileCard
+- LoginForm
+- StepProgressBar
+
+■ hooks：**useXxx**
+例：
+- useUserProfile
+- useStepProgress
+- useLoginForm
+- useSyncLocalStorage
+
+■ ファイル名はコンポーネント名と一致
+
+■ デフォルトエクスポート禁止（検索性向上）  
+→ `export const Xxx = ...`
+
+---
+
+# 3-2. **TypeScript 型の命名**
+■ エンティティ
+- UserEntity
+- StepEntity
+- ProductEntity
+
+■ API 入出力
+- GetUserResponse
+- UpdateUserRequest
+- LoginPayload
+- StepListResponse
+
+■ 内部 UI 用型
+- UserFormState
+- StepRenderItem
+
+---
+
+# 3-3. **関数命名（動詞 + 名詞）**
+■ 副作用あり（API / 外部通信）
+- fetchUserProfile  
+- updateUserSettings  
+- deleteStep  
+- postLoginInformation  
+- fetchStepList  
+
+■ ピュア関数（domain）
+- calculateStepScore
+- validateUser
+- parseApiDate
+
+■ usecase
+- executeUserLogin
+- executeStepCompletion
+
+---
+
+# 3-4. **State / Props / 変数命名**
+■ Boolean  
+- isLoading  
+- hasError  
+- canProceed  
+
+■ ID  
+- userId / stepId / tokenId
+
+■ 配列  
+- users  
+- steps  
+- messages  
+- logs  
+
+■ イベントハンドラ  
+- handleSubmit  
+- handleLogout  
+- handleChange  
+
+■ 情報の性質を含める  
+- tokenString  
+- expiryDate  
+- userRole  
+
+---
+
+# 3-5. **命名原則の例外（許容事項）**
+- 狭いスコープ（for / map / 一時変数）では短い命名を許可  
+  例：i, idx, msg, err, acc  
+- 過度に長い命名は禁止  
+  - 推奨：20字以下  
+  - 最大：25字（目安）
+
+-------------------------------------------------------------------------------
+# 4. リーダブルコード基準（必ず厳守）
+-------------------------------------------------------------------------------
+
+- 関数は単一責務（1関数＝1目的）
+- ネストは浅く（早期 return）
+- コメントは「なぜ」を説明する
+- 冗長な説明コメントは禁止
+- UIロジックは component から hook に分離
+- 副作用は hooks / services に隔離
+
+-------------------------------------------------------------------------------
+# 5. 追加リファクタリングルール
+-------------------------------------------------------------------------------
+
+## 副作用の分離
+- 副作用は hooks or services へ
+- reducer / domain に副作用を書かない
+
+## UI・ロジック・データアクセス分離
+- UI：components  
+- UIロジック：hooks  
+- ビジネス：services.usecase  
+- API：api / services.infra
+
+## コンポーネント責務縮小
+- 巨大ファイルは禁止  
+- 必要に応じてファイル分割
+
+## props の整理
+- 不要 props 削除  
+- 同種の props はオブジェクト化
+
+## TypeScript 型整理
+- 共通型は entities に移動  
+- API レスポンスと内部型を分離（Mapper OK）
+
+## エラーハンドリング統一
+- API エラー処理は共通化
+
+## import 整理
+- 未使用削除  
+- import 順序統一
+
+## 重複コード
+- 不要な重複は統合 or 削除  
+- 機能削除はしない（※UI 変更禁止）
+
+-------------------------------------------------------------------------------
+# 6. 出力形式（重要）
+-------------------------------------------------------------------------------
+
+1. **新しい src ディレクトリ構成（ツリー形式）**  
+2. **主要ファイルのリライト後コード（コメント方針C＋命名規則適用済）**  
+3. **改善理由の説明（構造・責務・命名の観点）**  
+4. **移動・新規作成・統合・削除ファイルの一覧**  
+5. **今後の保守指針**
+
+上記すべてを満たし、  
+**正しく動作し、UI デザインを変えずに、`src/` のリファクタリングを行ってください。**
