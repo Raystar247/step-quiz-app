@@ -1,4 +1,4 @@
-あなたは React + TypeScript（Vite）プロジェクト全体のリファクタリング支援者です。  
+あなたは React + TypeScript（Vite）プロジェクト全体のリファクタリングエキスパートです。  
 以下のディレクトリ構造方針、コメント方針C、命名規則、リーダブルコード指針、追加リファクタリングルールをすべて厳守し、  
 `src/` 以下を最適化してください。
 
@@ -6,6 +6,18 @@
 - リファクタリング後も **アプリは必ず正しく動作すること**  
 - **画面デザイン（UI構造・レイアウト・スタイル）に変更は一切加えないこと**  
 - コード改善は構造・責務・可読性に限定すること  
+
+-------------------------------------------------------------------------------
+# 0. リファクタリング優先順位（新規追加）
+-------------------------------------------------------------------------------
+リファクタリングは以下の順で段階的に進めてください。  
+各ステップは前のステップの条件が**全て満たされた場合のみ進めてください**。
+
+1. **バグ回避**：既存コードが正しく動作することを最優先。型チェック・コンパイル・API/ストア動作を含む。
+2. **UI・機能保護**：画面表示やレイアウト、既存機能は一切変更しない。
+3. **フォルダ構成・責務分割**：feature 内の components/hooks/services/api/store は適切な場所へ移動。UI・props には影響を与えない範囲で整理。
+4. **コメント整備**：コメント方針Cを適用し、ファイル先頭・レイヤー・関数にコメントを整備。
+5. **命名規則適用**：コンポーネント PascalCase、hooks useXxx、TypeScript 型命名を順次適用。短いスコープ変数の例外は許可。
 
 -------------------------------------------------------------------------------
 # 1. ディレクトリ構造（feature-based × Clean Architecture）
@@ -79,155 +91,63 @@
 # 3. 命名規則（原則＋例外付きで厳密化）
 -------------------------------------------------------------------------------
 
-# 3-1. **ファイル・コンポーネント・フック**
-■ コンポーネント：**PascalCase**  
-例：
-- UserProfileCard
-- LoginForm
-- StepProgressBar
+# 3-1. ファイル・コンポーネント・フック
+- コンポーネント：PascalCase  
+- hooks：useXxx  
+- ファイル名はコンポーネント名と一致  
+- デフォルトエクスポート禁止（`export const Xxx = ...`）
 
-■ hooks：**useXxx**
-例：
-- useUserProfile
-- useStepProgress
-- useLoginForm
-- useSyncLocalStorage
+# 3-2. TypeScript 型
+- エンティティ：UserEntity / StepEntity / ProductEntity  
+- API 入出力：GetUserResponse / UpdateUserRequest / LoginPayload / StepListResponse  
+- UI 用型：UserFormState / StepRenderItem
 
-■ ファイル名はコンポーネント名と一致
+# 3-3. 関数命名（動詞 + 名詞）
+- 副作用あり：fetchUserProfile / updateUserSettings / deleteStep  
+- ピュア関数：calculateStepScore / validateUser / parseApiDate  
+- usecase：executeUserLogin / executeStepCompletion
 
-■ デフォルトエクスポート禁止（検索性向上）  
-→ `export const Xxx = ...`
+# 3-4. State / Props / 変数命名
+- Boolean: isLoading / hasError / canProceed  
+- ID: userId / stepId / tokenId  
+- 配列: users / steps / messages / logs  
+- イベントハンドラ: handleSubmit / handleLogout / handleChange  
+- 情報の性質を含める: tokenString / expiryDate / userRole  
 
----
-
-# 3-2. **TypeScript 型の命名**
-■ エンティティ
-- UserEntity
-- StepEntity
-- ProductEntity
-
-■ API 入出力
-- GetUserResponse
-- UpdateUserRequest
-- LoginPayload
-- StepListResponse
-
-■ 内部 UI 用型
-- UserFormState
-- StepRenderItem
-
----
-
-# 3-3. **関数命名（動詞 + 名詞）**
-■ 副作用あり（API / 外部通信）
-- fetchUserProfile  
-- updateUserSettings  
-- deleteStep  
-- postLoginInformation  
-- fetchStepList  
-
-■ ピュア関数（domain）
-- calculateStepScore
-- validateUser
-- parseApiDate
-
-■ usecase
-- executeUserLogin
-- executeStepCompletion
-
----
-
-# 3-4. **State / Props / 変数命名**
-■ Boolean  
-- isLoading  
-- hasError  
-- canProceed  
-
-■ ID  
-- userId / stepId / tokenId
-
-■ 配列  
-- users  
-- steps  
-- messages  
-- logs  
-
-■ イベントハンドラ  
-- handleSubmit  
-- handleLogout  
-- handleChange  
-
-■ 情報の性質を含める  
-- tokenString  
-- expiryDate  
-- userRole  
-
----
-
-# 3-5. **命名原則の例外（許容事項）**
-- 狭いスコープ（for / map / 一時変数）では短い命名を許可  
-  例：i, idx, msg, err, acc  
-- 過度に長い命名は禁止  
-  - 推奨：20字以下  
-  - 最大：25字（目安）
+# 3-5. 命名例外
+- 狭いスコープ（for/map）では短い変数名許可：i, idx, msg, err, acc  
+- 過度に長い命名は禁止（推奨20字以下、最大25字）
 
 -------------------------------------------------------------------------------
 # 4. リーダブルコード基準（必ず厳守）
 -------------------------------------------------------------------------------
-
-- 関数は単一責務（1関数＝1目的）
-- ネストは浅く（早期 return）
-- コメントは「なぜ」を説明する
-- 冗長な説明コメントは禁止
-- UIロジックは component から hook に分離
+- 関数は単一責務（1関数＝1目的）  
+- ネストは浅く（早期 return）  
+- コメントは「なぜ」を説明  
+- 冗長な説明コメント禁止  
+- UIロジックは component から hook に分離  
 - 副作用は hooks / services に隔離
 
 -------------------------------------------------------------------------------
 # 5. 追加リファクタリングルール
 -------------------------------------------------------------------------------
-
-## 副作用の分離
-- 副作用は hooks or services へ
-- reducer / domain に副作用を書かない
-
-## UI・ロジック・データアクセス分離
-- UI：components  
-- UIロジック：hooks  
-- ビジネス：services.usecase  
-- API：api / services.infra
-
-## コンポーネント責務縮小
-- 巨大ファイルは禁止  
-- 必要に応じてファイル分割
-
-## props の整理
-- 不要 props 削除  
-- 同種の props はオブジェクト化
-
-## TypeScript 型整理
-- 共通型は entities に移動  
-- API レスポンスと内部型を分離（Mapper OK）
-
-## エラーハンドリング統一
-- API エラー処理は共通化
-
-## import 整理
-- 未使用削除  
-- import 順序統一
-
-## 重複コード
-- 不要な重複は統合 or 削除  
-- 機能削除はしない（※UI 変更禁止）
+- 副作用は hooks or services に隔離  
+- UI・ロジック・データアクセス分離  
+- コンポーネント責務縮小（巨大ファイル禁止）  
+- props の整理（不要削除・同種はオブジェクト化）  
+- TypeScript 型整理（共通型は entities、APIレスポンスと内部型分離）  
+- エラーハンドリング統一（共通化）  
+- import 整理（未使用削除、順序統一）  
+- 重複コード削除または統合（UI変更禁止）
 
 -------------------------------------------------------------------------------
 # 6. 出力形式（重要）
 -------------------------------------------------------------------------------
+1. 新しい src ディレクトリ構成（ツリー形式）  
+2. 主要ファイルのリライト後コード（コメント方針C＋命名規則適用済）  
+3. 改善理由の説明（構造・責務・命名の観点）  
+4. 移動・新規作成・統合・削除ファイルの一覧  
+5. 今後の保守指針  
 
-1. **新しい src ディレクトリ構成（ツリー形式）**  
-2. **主要ファイルのリライト後コード（コメント方針C＋命名規則適用済）**  
-3. **改善理由の説明（構造・責務・命名の観点）**  
-4. **移動・新規作成・統合・削除ファイルの一覧**  
-5. **今後の保守指針**
-
-上記すべてを満たし、  
-**正しく動作し、UI デザインを変えずに、`src/` のリファクタリングを行ってください。**
+上記すべてを満たし、**正しく動作し、UIデザインを変えずに `src/` のリファクタリングを行ってください。  
+優先順位はステップごとに従って、前ステップ条件が全て満たされた場合のみ次に進めてください。
