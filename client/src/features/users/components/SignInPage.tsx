@@ -4,9 +4,9 @@ import { useDispatch } from "react-redux";
 import { signInAsync } from "../store/user";
 import { type AppDispatch, type RootState, useSelector } from "../../../stores";
 import { useNavigate } from "react-router-dom";
-import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
+import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
-const SignInPage = () => {
+export const SignInPage = () => {
 
   const dispatch = useDispatch<AppDispatch>();
     const [form, setForm] = useState<SignInData>({
@@ -91,5 +91,3 @@ const SignInPage = () => {
         </LiquidGlass>
       );
 };
-
-export default SignInPage;

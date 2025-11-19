@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import type { ScoringFormattedAnswer } from "../type";
-import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
+import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
 type Props = {
 	formattedAnswers: ScoringFormattedAnswer[];
 	setFormattedAnswers: React.Dispatch<React.SetStateAction<ScoringFormattedAnswer[]>>;
 };
 
-const ScoringSheet: React.FC<Props> = ({ formattedAnswers, setFormattedAnswers }) => {
+export const ScoringSheet: React.FC<Props> = ({ formattedAnswers, setFormattedAnswers }) => {
 
 	useEffect(() => {
 		setFormattedAnswers(formattedAnswers);
@@ -124,5 +124,3 @@ const ScoringSheet: React.FC<Props> = ({ formattedAnswers, setFormattedAnswers }
 		</div>
 	);
 };
-
-export default ScoringSheet;

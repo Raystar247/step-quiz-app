@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import type { RootState } from "../../../stores";
-import { useSelector } from "react-redux";
-import userApi from "../api/userApi";
+import { useSelector } from "../../../stores";
+import { userApi } from "../api/userApi";
 import type { User } from "../type";
 
-const Main = () => {
+export const Main = () => {
 
     const [user, setUser] = useState<User>()
     const userId = useSelector((state: RootState) => state.user.id);
@@ -68,5 +68,3 @@ const Main = () => {
 
     );
 };
-
-export default Main;

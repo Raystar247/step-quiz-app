@@ -1,12 +1,12 @@
 import React, { useState, useMemo, useCallback } from "react";
 import type { ScoringFormattedAnswer } from "../type";
-import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
+import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
 type Props = {
   formattedAnswers: ScoringFormattedAnswer[];
 };
 
-const ScoreResult: React.FC<Props> = ({ formattedAnswers }) => {
+export const ScoreResult: React.FC<Props> = ({ formattedAnswers }) => {
   const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
 
   const toggleExpand = useCallback((index: number) => {
@@ -146,5 +146,3 @@ const ScoreResult: React.FC<Props> = ({ formattedAnswers }) => {
     </div>
   );
 };
-
-export default ScoreResult;

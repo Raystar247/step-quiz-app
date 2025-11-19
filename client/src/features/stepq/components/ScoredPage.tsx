@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Answer, Question, ScoringFormattedAnswer, Trial, UnitString } from "../type";
-import stepqApi from "../api/stepqApi";
-import SelectHeader from "./SelectHeader";
+import type { Answer, Question, ScoringFormattedAnswer } from "../type";
+import { stepqApi } from "../api/stepqApi";
 import type { User } from "../../users/type";
-import ScoreResult from "./ScoreResult";
+import { ScoreResult } from "./ScoreResult";
 import { useSelector, type RootState } from "../../../stores";
 
-const ScoredPage = () => {
+export const ScoredPage = () => {
   const urlParam = useParams<{ qgroupId: string }>();
-  const [answers, setAnswers] = useState<Answer[]>([]);
   const [formattedAnswers, setFormattedAnswers] = useState<ScoringFormattedAnswer[]>([]);
-  const [unit, setUnit] = useState<UnitString>("user");
 
   const userId = useSelector((state: RootState) => state.user.id);
 
@@ -32,7 +29,7 @@ const ScoredPage = () => {
       return {
         index: ans.id ? parseInt(ans.id.slice(-4), 16) : -1,
         qindex: question.index,
-        displayKey: unit === "user" ? question.index : user.username,
+        displayKey: question.index,
         correctAnswer: question.correctAnswer,
         username: user.username,
         answer: ans,
@@ -77,5 +74,3 @@ const ScoredPage = () => {
     </div>
   );
 };
-
-export default ScoredPage;

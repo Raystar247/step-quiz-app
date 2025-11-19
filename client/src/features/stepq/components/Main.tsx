@@ -1,23 +1,27 @@
+/**
+ * Stepq Main Component
+ * Purpose: 試験問題のレイアウトとタイマー、問題表示の統合
+ *
+ * 内部構成
+ * - domain: Trial 型
+ * - usecase: Trial データの取得と状態管理
+ * - infra: useSelector, useParams
+ * - ui: Timer, QuestionComponent の統合
+ */
+
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector, type RootState } from "../../../stores";
-import Timer from "./Timer";
-import Question from "./Question";
+import { useParams } from "react-router-dom";
+import { stepqApi } from "../api/stepqApi";
 import type { Trial } from "../type";
-import stepqApi from "../api/stepqApi";
+import { Timer } from "./Timer";
+import { QuestionComponent } from "./Question";
 
-const Main: React.FC = () => {
+export const Main: React.FC = () => {
     const urlParam = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const userId = useSelector((state: RootState) => state.user.id);
-
     const [trial, setTrial] = useState<Trial>();
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
-        // reduxの管理が正しくできていない → sessionStorageなどで正しく永続化する必要あり
-        // 正しく永続化できたら
-        // if (trial.userId != userId) { navigate('/error'); } を追加する
         const awake = async () => {
             if (!urlParam.id) {
                 return;
@@ -38,9 +42,7 @@ const Main: React.FC = () => {
     return (
         <div className="mt-10">
             <Timer />
-            <Question trial={trial} index={index} setIndex={setIndex} />
+            <QuestionComponent trial={trial} index={index} setIndex={setIndex} />
         </div>
     );
 };
-
-export default Main;

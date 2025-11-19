@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { type AppDispatch, type RootState, useSelector } from "../../../stores";
+import { type RootState, useSelector } from "../../../stores";
 import type { SignUpData } from "../type";
-import userApi from "../api/userApi";
-import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
+import { userApi } from "../api/userApi";
+import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
 // Zodスキーマ定義
 const signUpSchema = z.object({
@@ -19,7 +18,7 @@ const signUpSchema = z.object({
     .regex(/[0-9]/, { message: "パスワードには数字を含めてください" }),
 });
 
-const SignUpPage = () => {
+export const SignUpPage = () => {
   // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userInfo = useSelector((state: RootState) => state.user);
@@ -145,5 +144,3 @@ const SignUpPage = () => {
     </LiquidGlass>
   );
 };
-
-export default SignUpPage;

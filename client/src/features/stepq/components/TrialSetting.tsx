@@ -1,5 +1,5 @@
-import { useState, type ReactEventHandler } from "react";
-import stepqApi from "../api/stepqApi";
+import { useState } from "react";
+import { stepqApi } from "../api/stepqApi";
 import { useSelector, type RootState } from "../../../stores";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +31,7 @@ const TrialSetting: React.FC = () => {
     }
 
     return (
-        <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
+      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <h2 className="text-center text-2xl font-bold text-gray-800">
               Step Quiz
@@ -88,4 +88,4 @@ const TrialSetting: React.FC = () => {
       );
 };
 
-export default TrialSetting;
+export { TrialSetting };

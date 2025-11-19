@@ -1,9 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { SignInData, SignInResponse } from "../type";
-import userApi from "../api/userApi";
+import { userApi } from "../api/userApi";
 import type { AxiosError } from "axios";
 import persistReducer from "redux-persist/es/persistReducer";
-import storage from "redux-persist/lib/storage";
 import sessionStorage from "redux-persist/lib/storage/session";
 
 
@@ -43,7 +42,7 @@ const signInAsync = createAsyncThunk<SignInResponse, SignInData>(
             return res;
         } catch (error) {
             const axiosError = error as AxiosError;
-            return rejectWithValue(axiosError.response?.data?.message || axiosError.message);
+            return rejectWithValue(axiosError.message || 'Unknown error');
         }
     }
 );
@@ -56,4 +55,4 @@ const persistConfig = {
 };
 
 const persistedUserReducer = persistReducer(persistConfig, user.reducer);
-export default persistedUserReducer;
+export { persistedUserReducer };

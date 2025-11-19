@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector as rawUseSelector, type TypedUseSelectorHook } from "react-redux";
-import userReducer from "../features/users/store/user";
+import { persistedUserReducer as userReducer } from "../features/users/store/user";
 import { persistStore } from "redux-persist";
 
 const store = configureStore({
@@ -22,4 +22,4 @@ export type RootState = ReturnType<typeof store.getState>;
 export const useSelector: TypedUseSelectorHook<RootState> = rawUseSelector;
 export const persistor = persistStore(store);
 
-export default store;
+export { store };
