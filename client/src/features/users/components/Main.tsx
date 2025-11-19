@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import type { RootState } from "../../../stores";
 import { useSelector } from "../../../stores";
 import { userApi } from "../api/userApi";
-import type { User } from "../type";
+import type { User } from "../../../models";
 
 export const Main = () => {
 

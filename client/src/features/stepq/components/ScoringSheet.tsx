@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { ScoringFormattedAnswer } from "../type";
+import type { ScoringFormattedAnswer } from "../../../models";
 import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
 type Props = {

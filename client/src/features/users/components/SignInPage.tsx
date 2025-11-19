@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { SignInData } from "../type";
+import type { SignInData } from "../../../models";
 import { useDispatch } from "react-redux";
 import { signInAsync } from "../store/user";
 import { type AppDispatch, type RootState, useSelector } from "../../../stores";

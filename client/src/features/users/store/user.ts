@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { SignInData, SignInResponse } from "../type";
+import type { SignInData, SignInResponse } from "../../../models";
 import { userApi } from "../api/userApi";
 import type { AxiosError } from "axios";
 import persistReducer from "redux-persist/es/persistReducer";

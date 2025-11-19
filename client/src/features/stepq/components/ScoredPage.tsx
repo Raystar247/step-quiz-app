@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Answer, Question, ScoringFormattedAnswer } from "../type";
+import type { Answer, Question, ScoringFormattedAnswer } from "../../../models";
 import { stepqApi } from "../api/stepqApi";
-import type { User } from "../../users/type";
+import type { User } from "../../../models";
 import { ScoreResult } from "./ScoreResult";
 import { useSelector, type RootState } from "../../../stores";
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '../../../stores';
+import { fetchPlayerAnswers } from '../store/trial';
 
 export const ScoredPage = () => {
   const urlParam = useParams<{ qgroupId: string }>();
   const [formattedAnswers, setFormattedAnswers] = useState<ScoringFormattedAnswer[]>([]);
 
   const userId = useSelector((state: RootState) => state.user.id);
+  const dispatch = useDispatch<AppDispatch>();
+  const playerAnswers = useSelector((state: RootState) => state.trial.playerAnswers);
 
   // 解答データ整形
   const formatAnswer = async (answers: Answer[]): Promise<ScoringFormattedAnswer[]> => {
@@ -45,10 +50,11 @@ export const ScoredPage = () => {
 
   useEffect(() => {
     const f = async () => {
-        if (!urlParam.qgroupId) { return; }
-        const playerAnswers = await stepqApi.fetchPlayerAnswers(urlParam.qgroupId, userId);
-        const fmtAnswers = await formatAnswer(playerAnswers);
-        setFormattedAnswers(fmtAnswers);
+      if (!urlParam.qgroupId) { return; }
+      // fetch player answers through store thunk
+      await dispatch(fetchPlayerAnswers({ qgroupId: urlParam.qgroupId, userId } as any)).unwrap().catch(() => []);
+      const fmtAnswers = await formatAnswer(playerAnswers);
+      setFormattedAnswers(fmtAnswers);
     };
     f();
   }, []);

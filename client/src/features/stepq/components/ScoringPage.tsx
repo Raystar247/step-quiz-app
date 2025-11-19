@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Answer, ScoringFormattedAnswer, UnitString } from "../type";
+import type { Answer, ScoringFormattedAnswer, UnitString } from "../../../models";
 import { stepqApi } from "../api/stepqApi";
 import { SelectHeader } from "./SelectHeader";
 import { ScoringSheet } from "./ScoringSheet";

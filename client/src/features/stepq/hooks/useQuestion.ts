@@ -10,7 +10,10 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import type { Question, Trial } from '../type';
-import { stepqApi } from '../api/stepqApi';
+import { useDispatch } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../stores';
+import { useSelector } from '../../../stores';
+import { fetchQuestionByIndex, fetchQuestionsOfQGroup, postAnswer } from '../store/trial';
 import { useNavigate } from 'react-router-dom';
 
 /**
@@ -21,23 +24,26 @@ export const useQuestion = (trial: Trial, index: number, onIndexChange: (idx: nu
   const [question, setQuestion] = useState<Question>();
   const [answer, setAnswer] = useState('');
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const currentQuestion = useSelector((state: RootState) => state.trial.currentQuestion);
 
   // 問題データをフェッチ
   useEffect(() => {
     const fetchQuestion = async () => {
-      const q = await stepqApi.fetchQuestionByIndex(trial.qgroupId, index);
-      setQuestion(q);
+      const res = await dispatch(fetchQuestionByIndex({ qgroupId: trial.qgroupId, index } as any)).unwrap().catch(() => undefined);
+      setQuestion(res ?? currentQuestion);
     };
     fetchQuestion();
-  }, [trial.qgroupId, index]);
+  }, [trial.qgroupId, index, currentQuestion]);
 
   // 最後の問題判定
   const isLastQuestion = useCallback(async (currentIdx: number): Promise<boolean> => {
-    const questions = await stepqApi.fetchQuestionsOfQGroup(trial.qgroupId);
+    const res = await dispatch(fetchQuestionsOfQGroup(trial.qgroupId)).unwrap().catch(() => []);
+    const questions = res ?? [];
     if (!questions || questions.length === 0) return false;
     const maxIndex = Math.max(...questions.map(q => q.index));
     return currentIdx >= maxIndex;
-  }, [trial.qgroupId]);
+  }, [trial.qgroupId, dispatch]);
 
   // 解答送信とナビゲーション制御
   const handleSubmitAnswer = useCallback(
@@ -45,7 +51,7 @@ export const useQuestion = (trial: Trial, index: number, onIndexChange: (idx: nu
       e.preventDefault();
       if (!question) return;
 
-      await stepqApi.postAnswer(answer, trial.id, question.id);
+      await dispatch(postAnswer({ answerText: answer, trialId: trial.id, questionId: question.id } as any)).unwrap().catch(() => false);
       setAnswer('');
 
       const lastQuestion = await isLastQuestion(index);

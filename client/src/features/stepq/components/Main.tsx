@@ -11,38 +11,34 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { stepqApi } from "../api/stepqApi";
-import type { Trial } from "../type";
 import { Timer } from "./Timer";
 import { QuestionComponent } from "./Question";
+import { useDispatch } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../stores';
+import { useSelector } from '../../../stores';
+import { fetchTrial } from '../store/trial';
 
 export const Main: React.FC = () => {
     const urlParam = useParams<{ id: string }>();
-    const [trial, setTrial] = useState<Trial>();
-    const [index, setIndex] = useState(0);
+    const [trialIndex, setTrialIndex] = useState(0);
+    const dispatch = useDispatch<AppDispatch>();
+    const trial = useSelector((state: RootState) => state.trial.currentTrial);
 
     useEffect(() => {
         const awake = async () => {
-            if (!urlParam.id) {
-                return;
-            }
-            const _t = await stepqApi.fetchTrial(urlParam.id);
-            if (!_t) {
-                return; 
-            }
-            setTrial(_t);
-            setIndex(_t ? _t.index : 0 );
+            if (!urlParam.id) return;
+            const res = await dispatch(fetchTrial(urlParam.id as string)).unwrap().catch(() => undefined);
+            // if the store has the trial, set local index from it
+            if (res) setTrialIndex(res.index ?? 0);
         };
         awake();
     }, []);
 
-    if (!trial) {
-        return <p>エラー発生！</p>
-    }
+    if (!trial) return <p>エラー発生！</p>;
     return (
         <div className="mt-10">
             <Timer />
-            <QuestionComponent trial={trial} index={index} setIndex={setIndex} />
+            <QuestionComponent trial={trial} index={trialIndex} setIndex={setTrialIndex} />
         </div>
     );
 };

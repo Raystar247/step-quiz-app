@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { type RootState, useSelector } from "../../../stores";
-import type { SignUpData } from "../type";
+import type { SignUpData } from "../../../models";
 import { userApi } from "../api/userApi";
 import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 

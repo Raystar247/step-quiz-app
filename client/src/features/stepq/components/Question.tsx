@@ -8,7 +8,7 @@
  * - ui: LiquidGlass、form 要素
  */
 
-import type { Trial } from "../type";
+import type { Trial } from "../../../models";
 import { useQuestion } from "../hooks/useQuestion";
 import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useSelector as rawUseSelector, type TypedUseSelectorHook } from "react-redux";
 import { persistedUserReducer as userReducer } from "../features/users/store/user";
+import { trialReducer } from "../features/stepq/store/trial";
 import { persistStore } from "redux-persist";
 
 const store = configureStore({
     reducer: {
-        user: userReducer
+        user: userReducer,
+        trial: trialReducer,
     },
     middleware: (getDefaultMiddleware) => 
         getDefaultMiddleware({

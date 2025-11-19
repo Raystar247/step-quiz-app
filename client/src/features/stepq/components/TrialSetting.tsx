@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { stepqApi } from "../api/stepqApi";
-import { useSelector, type RootState } from "../../../stores";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../stores';
+import { useSelector } from '../../../stores';
+import { generateTrial } from '../store/trial';
 
 const TrialSetting: React.FC = () => {
 
@@ -11,21 +13,24 @@ const TrialSetting: React.FC = () => {
     });
     const userId = useSelector((state: RootState) => state.user.id);
     const navigate = useNavigate();
+    const dispatch = useDispatch<AppDispatch>();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log(userId);
-        const str = await stepqApi.generateTrial(form.keyword, form.passphrase, userId);
-        console.log(str);
-        if (str == '') { return; }  // Trialデータの生成に失敗した場合何もしない
-        navigate(`/stepq/${str}`);
+      e.preventDefault();
+      // generateTrial を store に委譲
+      const result = await dispatch(generateTrial({ qgroupKeyword: form.keyword, passphrase: form.passphrase, userId } as any)).unwrap().catch(() => '');
+      const str = result ?? '';
+      if (!str) return; // Trialデータの生成に失敗した場合何もしない
+      navigate(`/stepq/${str}`);
     };
 
     const handleConfirm = async () => {
+      // keep calling API directly for group id lookup (thin API layer)
+      const { stepqApi } = await import('../api/stepqApi');
       const id = await stepqApi.fetchQuestionGroupId(form.keyword);
       navigate(`/scored/${id}`);
     }
