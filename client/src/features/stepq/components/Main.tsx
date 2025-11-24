@@ -1,46 +1,44 @@
+/**
+ * Stepq Main Component
+ * Purpose: 試験問題のレイアウトとタイマー、問題表示の統合
+ *
+ * 内部構成
+ * - domain: Trial 型
+ * - usecase: Trial データの取得と状態管理
+ * - infra: useSelector, useParams
+ * - ui: Timer, QuestionComponent の統合
+ */
+
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector, type RootState } from "../../../stores";
-import Timer from "./Timer";
-import Question from "./Question";
-import type { Trial } from "../type";
-import stepqApi from "../api/stepqApi";
+import { useParams } from "react-router-dom";
+import { Timer } from "./Timer";
+import { QuestionComponent } from "./Question";
+import { useDispatch } from 'react-redux';
+import type { AppDispatch, RootState } from '../../../stores';
+import { useSelector } from '../../../stores';
+import { fetchTrial } from '../store/trial';
 
-const Main: React.FC = () => {
+export const Main: React.FC = () => {
     const urlParam = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const userId = useSelector((state: RootState) => state.user.id);
-
-    const [trial, setTrial] = useState<Trial>();
-    const [index, setIndex] = useState(0);
+    const [trialIndex, setTrialIndex] = useState(0);
+    const dispatch = useDispatch<AppDispatch>();
+    const trial = useSelector((state: RootState) => state.trial.currentTrial);
 
     useEffect(() => {
-        // reduxの管理が正しくできていない → sessionStorageなどで正しく永続化する必要あり
-        // 正しく永続化できたら
-        // if (trial.userId != userId) { navigate('/error'); } を追加する
         const awake = async () => {
-            if (!urlParam.id) {
-                return;
-            }
-            const _t = await stepqApi.fetchTrial(urlParam.id);
-            if (!_t) {
-                return; 
-            }
-            setTrial(_t);
-            setIndex(_t ? _t.index : 0 );
+            if (!urlParam.id) return;
+            const res = await dispatch(fetchTrial(urlParam.id as string)).unwrap().catch(() => undefined);
+            // if the store has the trial, set local index from it
+            if (res) setTrialIndex(res.index ?? 0);
         };
         awake();
     }, []);
 
-    if (!trial) {
-        return <p>エラー発生！</p>
-    }
+    if (!trial) return <p>エラー発生！</p>;
     return (
         <div className="mt-10">
             <Timer />
-            <Question trial={trial} index={index} setIndex={setIndex} />
+            <QuestionComponent trial={trial} index={trialIndex} setIndex={setTrialIndex} />
         </div>
     );
 };
-
-export default Main;

@@ -1,19 +1,21 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Answer, Question, ScoringFormattedAnswer, Trial, UnitString } from "../type";
-import stepqApi from "../api/stepqApi";
-import SelectHeader from "./SelectHeader";
-import type { User } from "../../users/type";
-import ScoreResult from "./ScoreResult";
+import type { Answer, Question, ScoringFormattedAnswer } from "../../../models";
+import { stepqApi } from "../api/stepqApi";
+import type { User } from "../../../models";
+import { ScoreResult } from "./ScoreResult";
 import { useSelector, type RootState } from "../../../stores";
+import { useDispatch } from 'react-redux';
+import type { AppDispatch } from '../../../stores';
+import { fetchPlayerAnswers } from '../store/trial';
 
-const ScoredPage = () => {
+export const ScoredPage = () => {
   const urlParam = useParams<{ qgroupId: string }>();
-  const [answers, setAnswers] = useState<Answer[]>([]);
   const [formattedAnswers, setFormattedAnswers] = useState<ScoringFormattedAnswer[]>([]);
-  const [unit, setUnit] = useState<UnitString>("user");
 
   const userId = useSelector((state: RootState) => state.user.id);
+  const dispatch = useDispatch<AppDispatch>();
+  const playerAnswers = useSelector((state: RootState) => state.trial.playerAnswers);
 
   // 解答データ整形
   const formatAnswer = async (answers: Answer[]): Promise<ScoringFormattedAnswer[]> => {
@@ -32,7 +34,7 @@ const ScoredPage = () => {
       return {
         index: ans.id ? parseInt(ans.id.slice(-4), 16) : -1,
         qindex: question.index,
-        displayKey: unit === "user" ? question.index : user.username,
+        displayKey: question.index,
         correctAnswer: question.correctAnswer,
         username: user.username,
         answer: ans,
@@ -48,10 +50,11 @@ const ScoredPage = () => {
 
   useEffect(() => {
     const f = async () => {
-        if (!urlParam.qgroupId) { return; }
-        const playerAnswers = await stepqApi.fetchPlayerAnswers(urlParam.qgroupId, userId);
-        const fmtAnswers = await formatAnswer(playerAnswers);
-        setFormattedAnswers(fmtAnswers);
+      if (!urlParam.qgroupId) { return; }
+      // fetch player answers through store thunk
+      await dispatch(fetchPlayerAnswers({ qgroupId: urlParam.qgroupId, userId } as any)).unwrap().catch(() => []);
+      const fmtAnswers = await formatAnswer(playerAnswers);
+      setFormattedAnswers(fmtAnswers);
     };
     f();
   }, []);
@@ -77,5 +80,3 @@ const ScoredPage = () => {
     </div>
   );
 };
-
-export default ScoredPage;

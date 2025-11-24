@@ -6,7 +6,7 @@ interface UserQuestionToggleProps {
     onChange?: (unit: UnitString) => void;
 }
 
-const UserQuestionToggle: React.FC<UserQuestionToggleProps> = ({ unit, onChange }) => {
+export const UserQuestionToggle: React.FC<UserQuestionToggleProps> = ({ unit, onChange }) => {
     
   const handleToggle = (newUnit: UnitString) => {
     onChange?.(newUnit);
@@ -74,5 +74,3 @@ const UserQuestionToggle: React.FC<UserQuestionToggleProps> = ({ unit, onChange 
     </div>
   );
 };
-
-export default UserQuestionToggle;

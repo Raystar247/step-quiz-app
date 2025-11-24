@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { finishMessages } from "../static/messages";
-import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
+import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
-const QuestionEnd: React.FC = () => {
+export const QuestionEnd: React.FC = () => {
     const location = useLocation();
     const state = location.state as { key?: keyof typeof finishMessages };
 
@@ -16,5 +16,3 @@ const QuestionEnd: React.FC = () => {
         </LiquidGlass>
     );
 };
-
-export default QuestionEnd;
