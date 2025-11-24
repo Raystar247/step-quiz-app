@@ -1,25 +1,22 @@
-import React, { useState } from 'react';
-import UserQuestionToggle from './UserQuestionToggle';
+import React from 'react';
+import { UserQuestionToggle } from './UserQuestionToggle';
 import type { Answer, UnitString } from '../type';
-import stepqApi from '../api/stepqApi';
-import LiquidGlass from '../../../fundamentalComponents/LiquidGlass';
+import { useAnswerSearch } from '../hooks/useAnswerSearch';
+import { LiquidGlass } from '../../../fundamentalComponents/LiquidGlass';
 
-const SelectHeader: React.FC<{
+export const SelectHeader: React.FC<{
     qgroupId: string | undefined,
     setAnswers: (v: Answer[]) => void,
     unit: UnitString,
     setUnit: (v: UnitString) => void
 }> = ({ qgroupId, setAnswers, unit, setUnit }) => {
-    const [searchText, setSearchText] = useState<string>('');
-    
+    const { searchText, setSearchText, performSearch } = useAnswerSearch();
 
     const onSearch = async () => {
-        if (!qgroupId) { return; }
-        const res = await stepqApi.filterAnswers(unit, searchText, qgroupId);
-        setAnswers(res);
-        console.log("answer fetched");
-        console.log(res);
-    }
+        if (!qgroupId) return;
+        const results = await performSearch(unit, qgroupId);
+        setAnswers(results);
+    };
 
     return (
         <div className="flex items-center gap-4">
@@ -45,7 +42,5 @@ const SelectHeader: React.FC<{
             </svg>
             </LiquidGlass>
         </div>
-    )
+    );
 };
-
-export default SelectHeader

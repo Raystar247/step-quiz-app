@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { type AppDispatch, type RootState, useSelector } from "../../../stores";
-import type { SignUpData } from "../type";
-import userApi from "../api/userApi";
-import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
+import { type RootState, useSelector } from "../../../stores";
+import type { SignUpData } from "../../../models";
+import { userApi } from "../api/userApi";
+import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
 // Zodスキーマ定義
 const signUpSchema = z.object({
@@ -19,7 +18,7 @@ const signUpSchema = z.object({
     .regex(/[0-9]/, { message: "パスワードには数字を含めてください" }),
 });
 
-const SignUpPage = () => {
+export const SignUpPage = () => {
   // const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const userInfo = useSelector((state: RootState) => state.user);
@@ -63,7 +62,9 @@ const SignUpPage = () => {
   }, [userInfo]);
 
   return (
-    <LiquidGlass as="div" colorScheme="white" className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
+    <LiquidGlass as="div" colorScheme="white" className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6 m-[2rem]" onSubmit={handleSubmit}
+    
+    >
       <div>
         <h2 className="text-center text-2xl font-bold text-gray-800">
           Sign up
@@ -127,6 +128,7 @@ const SignUpPage = () => {
 
         <LiquidGlass
           type="submit"
+          centerContent
           className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-200"
         >
           Sign up
@@ -142,5 +144,3 @@ const SignUpPage = () => {
     </LiquidGlass>
   );
 };
-
-export default SignUpPage;

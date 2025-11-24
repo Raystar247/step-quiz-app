@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import type { SignInData } from "../type";
+import type { SignInData } from "../../../models";
 import { useDispatch } from "react-redux";
 import { signInAsync } from "../store/user";
 import { type AppDispatch, type RootState, useSelector } from "../../../stores";
 import { useNavigate } from "react-router-dom";
-import LiquidGlass from "../../../fundamentalComponents/LiquidGlass";
+import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 
-const SignInPage = () => {
+export const SignInPage = () => {
 
   const dispatch = useDispatch<AppDispatch>();
     const [form, setForm] = useState<SignInData>({
@@ -34,7 +34,7 @@ const SignInPage = () => {
     };
 
     return (
-        <LiquidGlass as="div" colorScheme="white" hoverEffect={false} className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6" onSubmit={handleSubmit}>
+        <LiquidGlass as="div" colorScheme="white" hoverEffect={false} className="w-full max-w-md bg-white shadow-md rounded-lg p-8 space-y-6 m-[2rem] mt-10" onSubmit={handleSubmit}>
           <div>
             <h2 className="text-center text-2xl font-bold text-gray-800">
               Log in
@@ -76,6 +76,7 @@ const SignInPage = () => {
             <LiquidGlass as="button"
               type="submit"
               className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-200"
+              centerContent
             >
               Sign in
             </LiquidGlass>
@@ -90,5 +91,3 @@ const SignInPage = () => {
         </LiquidGlass>
       );
 };
-
-export default SignInPage;

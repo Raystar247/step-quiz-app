@@ -1,10 +1,21 @@
+/**
+ * Timer Component
+ * Purpose: 試験制限時間を管理、警告表示、タイムアップ時に自動遷移
+ *
+ * 内部構成
+ * - domain: 時間フォーマッティング
+ * - usecase: タイマー制御、警告判定
+ * - infra: useNavigate
+ * - ui: 画像表示、時間テキスト
+ */
+
 import { useEffect, useRef, useState } from "react";
 import normalTimerframe from "../../../assets/stepq/timerframe_normal.png";
 import warningTimerframe from "../../../assets/stepq/timerframe_warning.png"; 
 import { useNavigate } from "react-router-dom";
 
 
-const Timer: React.FC = () => {
+export const Timer: React.FC = () => {
 
     const navigate = useNavigate();
 
@@ -13,7 +24,7 @@ const Timer: React.FC = () => {
     const warningElapsedTime = timeLimit - warningTime;
     const [elapsed_100ms, setElapsed_100ms] = useState(0);  // 100ms単位の経過時間
     const [timerframe, setTimerframe] = useState(normalTimerframe);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     // 時間をmm:ss:d形式の文字列に変換する関数
     const formatRemainingTime = (time_100ms: number): string => {
@@ -75,5 +86,3 @@ const Timer: React.FC = () => {
         </div>
     );
 };
-
-export default Timer;

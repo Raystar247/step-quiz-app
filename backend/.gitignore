@@ -1,0 +1,15 @@
+# Node
+node_modules
+dist
+build
+
+# Prisma
+.env
+node_modules/@prisma/client
+prisma/migrations
+
+# SQLite (使用している場合)
+dev.db
+
+# VSCode
+.vscode

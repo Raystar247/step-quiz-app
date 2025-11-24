@@ -1,22 +1,22 @@
 import { useEffect, useState } from "react";
 import type { RootState } from "../../../stores";
-import { useSelector } from "react-redux";
-import userApi from "../api/userApi";
-import type { User } from "../type";
+import { useSelector } from "../../../stores";
+import { userApi } from "../api/userApi";
+import type { User } from "../../../models";
 
-const Main = () => {
+export const Main = () => {
 
     const [user, setUser] = useState<User>()
     const userId = useSelector((state: RootState) => state.user.id);
 
     useEffect(() =>  {
         const getUser = async () => {
-            const id = sessionStorage.getItem("userId_");
-            if (!id) {
-                console.error("User IDが見つかりません");
-                return;
-            }
-            const _user = await userApi.getUserInfo(id);
+            // const id = sessionStorage.getItem("userId_");
+            // if (!id) {
+            //     console.error("User IDが見つかりません");
+            //     return;
+            // }
+            const _user = await userApi.getUserInfo(userId);
             setUser(_user);
         };
         getUser();
@@ -68,5 +68,3 @@ const Main = () => {
 
     );
 };
-
-export default Main;

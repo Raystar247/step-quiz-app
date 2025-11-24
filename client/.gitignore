@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Deprecated feature-level type stubs (kept as backups locally)
+src/features/stepq/type.deprecated.ts
+src/features/users/type.deprecated.ts
