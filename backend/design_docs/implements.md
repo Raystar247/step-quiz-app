@@ -133,33 +133,4 @@ npm test
 
 ---
 
-## Docker 化（追加）
-
-このリポジトリはクライアントとバックエンドそれぞれをコンテナ化し、`docker-compose` でオーケストレーションできる構成を追加しました。
-
-追加ファイル:
-- `backend/Dockerfile` — マルチステージで TypeScript をビルドし、Prisma クライアント生成を行い、コンテナ起動時に `prisma migrate deploy` を実行してからアプリを起動します。
-- `client/Dockerfile` — Node ビルドステージで `npm run build` を実行し、成果物を `nginx` で配信するイメージを作ります。
-- `docker-compose.yml` — 次のサービスを定義します:
-  - `db` (Postgres)
-  - `backend` (Node アプリケーション、ポート `3000`)
-  - `client` (静的ファイルを nginx で配信、ポート `8080`)
-
-ローカルでの起動手順 (Docker がインストール済みであること):
-
-```bash
-# ルートで docker-compose を使ってビルド・起動します
-docker-compose up --build
-
-# ブラウザ: http://localhost:8080 (client)
-# API: http://localhost:3000
-```
-
-環境変数のポイント:
-- `docker-compose.yml` 内で `DATABASE_URL`, `JWT_SECRET`, `NODE_ENV`, `CORS_ORIGINS` を設定しています。必要に応じて値を変更してください。
-
-注意点:
-- `backend` コンテナは起動時に `npx prisma migrate deploy` を実行します。Postgres コンテナが完全に起動する前に migrate が実行されて失敗する場合があります。現状は `depends_on` による起動順序に任せていますが、必要なら待機スクリプト（`wait-for-it` 等）を導入してデータベースのレディネスを確実に待つことを推奨します。
-
-
 もしこの実装内容について補足が必要なら、どの部分を詳しく説明するか教えてください（コントローラの流れ、Prisma スキーマ、具体的なテストケースの説明など）。
