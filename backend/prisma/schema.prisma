@@ -9,8 +9,51 @@ datasource db {
 }
 
 model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  trials       Trial[]
+}
+
+model QGroup {
+  id         String     @id @default(uuid())
+  title      String
+  passphrase String
+  questions  Question[]
+  trials     Trial[]
+}
+
+model Question {
+  id            String   @id @default(uuid())
+  qgroupId      String
+  index         Int
+  description   String
+  correctAnswer String
+  qgroup        QGroup   @relation(fields: [qgroupId], references: [id])
+  answers       Answer[]
+}
+
+model Trial {
   id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  createdAt DateTime @default(now())
+  qgroupId  String
+  userId    String
+  index     Int
+  startTime DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  qgroup    QGroup   @relation(fields: [qgroupId], references: [id])
+  answers   Answer[]
+}
+
+model Answer {
+  id            String   @id @default(uuid())
+  trialId       String
+  questionId    String
+  answer        String
+  score         Int
+  scoringStatus String?
+  memo          String
+  trial         Trial    @relation(fields: [trialId], references: [id])
+  question      Question @relation(fields: [questionId], references: [id])
 }

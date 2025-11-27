@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: STEPQ API
+  version: 1.0
+  description: STEPQ API 仕様定義書（完全版 / 日本語）
+
+servers:
+  - url: http://localhost:3000/api
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uuid-1234"
+        email:
+          type: string
+          example: "user@example.com"
+        name:
+          type: string
+          example: "Taro"
+      required:
+        - id
+        - email
+        - name
+
+    QGroup:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uuid-5678"
+        title:
+          type: string
+          example: "数学"
+        passphrase:
+          type: string
+          example: "abc123"
+      required:
+        - id
+        - title
+        - passphrase
+
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uuid-1111"
+        qgroupId:
+          type: string
+          example: "uuid-5678"
+        index:
+          type: integer
+          example: 3
+        description:
+          type: string
+          example: "次の計算をせよ"
+        correctAnswer:
+          type: string
+          example: "42"
+      required:
+        - id
+        - qgroupId
+        - index
+        - description
+        - correctAnswer
+
+    Trial:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uuid-2222"
+        qgroupId:
+          type: string
+          example: "uuid-5678"
+        userId:
+          type: string
+          example: "uuid-1234"
+        index:
+          type: integer
+          example: 1
+        startTime:
+          type: string
+          format: date-time
+          example: "2024-01-01T10:00:00Z"
+      required:
+        - id
+        - qgroupId
+        - userId
+        - index
+        - startTime
+
+    Answer:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uuid-3333"
+        trialId:
+          type: string
+          example: "uuid-2222"
+        questionId:
+          type: string
+          example: "uuid-1111"
+        answer:
+          type: string
+          example: "42"
+        score:
+          type: number
+          example: 5
+        scoringStatus:
+          type: string
+          nullable: true
+          example: "done"
+        memo:
+          type: string
+          example: "丁寧に書かれていた"
+      required:
+        - id
+        - trialId
+        - questionId
+        - answer
+        - score
+        - memo
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum: [false]
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "VALIDATION_ERROR"
+            message:
+              type: string
+              example: "メール形式が不正です"
+            details:
+              type: object
+      required:
+        - success
+        - error
+
+security:
+  - BearerAuth: []
+
+paths: {}
