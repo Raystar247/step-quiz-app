@@ -23,8 +23,10 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
+COPY wait-for-db.sh ./wait-for-db.sh
+RUN chmod +x /app/wait-for-db.sh
 
 ENV NODE_ENV=production
 EXPOSE 3000
 
-CMD ["sh","-c","npx prisma migrate deploy && npm start"]
+CMD ["sh","-c","/app/wait-for-db.sh && npx prisma migrate deploy && npm start"]
