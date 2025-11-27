@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: stepq_user
+      POSTGRES_PASSWORD: stepq_pass
+      POSTGRES_DB: stepq_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: "postgresql://stepq_user:stepq_pass@db:5432/stepq_db?schema=public"
+      JWT_SECRET: "please-set-a-secret"
+      NODE_ENV: production
+      CORS_ORIGINS: "http://localhost:8080"
+    depends_on:
+      - db
+
+  client:
+    build: ./client
+    ports:
+      - "8080:80"
+    environment:
+      VITE_API_BASE_URL: "http://localhost:3000"
+
+volumes:
+  db_data:
