@@ -24,13 +24,13 @@ components:
         email:
           type: string
           example: "user@example.com"
-        name:
+        username:
           type: string
           example: "Taro"
       required:
         - id
         - email
-        - name
+        - username
 
     QGroup:
       type: object
@@ -44,6 +44,12 @@ components:
         passphrase:
           type: string
           example: "abc123"
+        nQuestions:
+          type: integer
+          example: 10
+        timeLimit:
+          type: integer
+          example: 600
       required:
         - id
         - title
@@ -64,6 +70,9 @@ components:
         description:
           type: string
           example: "次の計算をせよ"
+        questionText:
+          type: string
+          example: "(1+2)*3 の値を答えよ"
         correctAnswer:
           type: string
           example: "42"
@@ -72,6 +81,7 @@ components:
         - qgroupId
         - index
         - description
+        - questionText
         - correctAnswer
 
     Trial:

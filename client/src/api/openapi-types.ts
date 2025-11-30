@@ -13,7 +13,7 @@ export interface components {
             /** @example user@example.com */
             email: string;
             /** @example Taro */
-            name: string;
+            username: string;
         };
         QGroup: {
             /** @example uuid-5678 */
@@ -22,6 +22,10 @@ export interface components {
             title: string;
             /** @example abc123 */
             passphrase: string;
+            /** @example 10 */
+            nQuestions?: number;
+            /** @example 600 */
+            timeLimit?: number;
         };
         Question: {
             /** @example uuid-1111 */
@@ -32,6 +36,8 @@ export interface components {
             index: number;
             /** @example 次の計算をせよ */
             description: string;
+            /** @example (1+2)*3 の値を答えよ */
+            questionText: string;
             /** @example 42 */
             correctAnswer: string;
         };

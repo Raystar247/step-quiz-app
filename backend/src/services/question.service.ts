@@ -6,7 +6,8 @@ export const getQuestionsByQGroup = async (qgroupId: string) => {
     id: it.id,
     qgroupId: it.qgroupId,
     index: it.index,
-    description: it.description,
+    description: it.description ?? it.questionText,
+    questionText: it.questionText,
     correctAnswer: it.correctAnswer
   }));
 };
@@ -19,7 +20,7 @@ export const getQuestionByQGroupAndIndex = async (qgroupId: string, index: numbe
     err.code = "NOT_FOUND";
     throw err;
   }
-  return { id: it.id, qgroupId: it.qgroupId, index: it.index, description: it.description, correctAnswer: it.correctAnswer };
+  return { id: it.id, qgroupId: it.qgroupId, index: it.index, description: it.description ?? it.questionText, questionText: it.questionText, correctAnswer: it.correctAnswer };
 };
 
 export const getQuestionById = async (id: string) => {
@@ -30,10 +31,10 @@ export const getQuestionById = async (id: string) => {
     err.code = "NOT_FOUND";
     throw err;
   }
-  return { id: it.id, qgroupId: it.qgroupId, index: it.index, description: it.description, correctAnswer: it.correctAnswer };
+  return { id: it.id, qgroupId: it.qgroupId, index: it.index, description: it.description ?? it.questionText, questionText: it.questionText, correctAnswer: it.correctAnswer };
 };
 
-export const createQuestion = async (dto: { qgroupId: string; index: number; description: string; correctAnswer: string }) => {
+export const createQuestion = async (dto: { qgroupId: string; index: number; description?: string; questionText: string; correctAnswer: string }) => {
   // check duplicates by qgroupId+index
   const existing = await questionRepo.findByQGroupIdAndIndex(dto.qgroupId, dto.index);
   if (existing) {
@@ -42,6 +43,7 @@ export const createQuestion = async (dto: { qgroupId: string; index: number; des
     err.code = "CONFLICT";
     throw err;
   }
-  const created = await questionRepo.create(dto);
-  return { id: created.id, qgroupId: created.qgroupId, index: created.index, description: created.description, correctAnswer: created.correctAnswer };
+  const description = dto.description ?? dto.questionText;
+  const created = await questionRepo.create({ qgroupId: dto.qgroupId, index: dto.index, questionText: dto.questionText, description, correctAnswer: dto.correctAnswer });
+  return { id: created.id, qgroupId: created.qgroupId, index: created.index, description: created.description ?? created.questionText, questionText: created.questionText, correctAnswer: created.correctAnswer };
 };

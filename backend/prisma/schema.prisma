@@ -21,6 +21,8 @@ model QGroup {
   id         String     @id @default(uuid())
   title      String
   passphrase String
+  nQuestions Int     @default(0)
+  timeLimit  Int     @default(0)
   questions  Question[]
   trials     Trial[]
 }
@@ -29,7 +31,8 @@ model Question {
   id            String   @id @default(uuid())
   qgroupId      String
   index         Int
-  description   String
+  description   String?
+  questionText  String
   correctAnswer String
   qgroup        QGroup   @relation(fields: [qgroupId], references: [id])
   answers       Answer[]

@@ -21,6 +21,7 @@ import { QuestionEnd } from './features/stepq/components/QuestionEnd'
 import { ScoringPage } from './features/stepq/components/ScoringPage'
 import { ScoredPage } from './features/stepq/components/ScoredPage'
 import { PersistGate } from 'redux-persist/integration/react'
+import ApiDemo from './features/stepq/components/ApiDemo'
 
 export function App() {
 
@@ -31,6 +32,7 @@ export function App() {
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
             <Routes>
+              <Route path="/demo" element={<ApiDemo />} />
               <Route path="/signin" element={<SignInPage />} />
               <Route path="/user" element={<UserMain />} />
               <Route path="/signup" element={<SignUpPage />} />

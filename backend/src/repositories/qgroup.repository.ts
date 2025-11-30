@@ -10,4 +10,4 @@ export const findById = async (id: string) => prisma.qGroup.findUnique({ where: 
 
 export const findByTitleExact = async (title: string) => prisma.qGroup.findFirst({ where: { title } });
 
-export const create = async (data: { title: string; passphrase: string }) => prisma.qGroup.create({ data });
+export const create = async (data: { title: string; passphrase: string; nQuestions?: number; timeLimit?: number }) => prisma.qGroup.create({ data });

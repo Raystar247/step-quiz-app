@@ -1,1 +1,1 @@
-export const ENDPOINT_URL = 'http://localhost:3002';
+export const ENDPOINT_URL = 'http://localhost:3000';

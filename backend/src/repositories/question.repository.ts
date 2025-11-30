@@ -14,6 +14,6 @@ export const findById = async (id: string) => {
   return prisma.question.findUnique({ where: { id } });
 };
 
-export const create = async (data: { qgroupId: string; index: number; description: string; correctAnswer: string }) => {
+export const create = async (data: { qgroupId: string; index: number; questionText: string; description?: string; correctAnswer: string }) => {
   return prisma.question.create({ data });
 };

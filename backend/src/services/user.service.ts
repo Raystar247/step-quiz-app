@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import config from "../config/default";
 import * as userRepo from "../repositories/user.repository";
 
-export const createUser = async (dto: { email: string; password: string; name: string }) => {
+export const createUser = async (dto: { email: string; password: string; username: string }) => {
   const existing = await userRepo.findByEmail(dto.email);
   if (existing) {
     const err: any = new Error("Email already exists");
@@ -12,8 +12,8 @@ export const createUser = async (dto: { email: string; password: string; name: s
     throw err;
   }
   const hash = await bcrypt.hash(dto.password, 10);
-  const created = await userRepo.create({ email: dto.email, passwordHash: hash, name: dto.name });
-  return { id: created.id, email: created.email, name: created.name };
+  const created = await userRepo.create({ email: dto.email, passwordHash: hash, name: dto.username });
+  return { id: created.id, email: created.email, username: created.name };
 };
 
 export const authenticateUser = async (dto: { email: string; password: string }) => {
@@ -32,7 +32,7 @@ export const authenticateUser = async (dto: { email: string; password: string })
     throw err;
   }
   const token = jwt.sign({ userId: user.id }, config.jwtSecret, { expiresIn: "7d" });
-  return { token, user: { id: user.id, email: user.email, name: user.name } };
+  return { token, user: { id: user.id, email: user.email, username: user.name } };
 };
 
 export const getUserById = async (id: string) => {
@@ -43,5 +43,5 @@ export const getUserById = async (id: string) => {
     err.code = "NOT_FOUND";
     throw err;
   }
-  return { id: user.id, email: user.email, name: user.name };
+  return { id: user.id, email: user.email, username: user.name };
 };

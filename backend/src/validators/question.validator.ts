@@ -13,7 +13,8 @@ export const questionCreateSchema = z.object({
   body: z.object({
     qgroupId: z.string().uuid(),
     index: z.number().int(),
-    description: z.string().min(1),
+    description: z.string().min(1).optional(),
+    questionText: z.string().min(1),
     correctAnswer: z.string().min(1)
   })
 });
