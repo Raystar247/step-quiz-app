@@ -94,6 +94,7 @@ cp .env.example .env
 
 ```bash
 npm install
+export $(cat .env | xargs)
 npx prisma generate
 npx prisma migrate dev --name init
 ```
