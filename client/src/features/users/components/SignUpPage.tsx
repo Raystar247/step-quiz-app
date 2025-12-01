@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { type RootState, useSelector } from "../../../stores";
 import type { SignUpData } from "../../../models";
-import { userApi } from "../api/userApi";
 import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
+import { userApiService } from "../infrastructure/api";
 
 // Zodスキーマ定義
 const signUpSchema = z.object({
@@ -51,7 +51,7 @@ export const SignUpPage = () => {
       return;
     }
 
-    await userApi.signUp(form);
+    await userApiService.signUp(form);
     navigate("/signin");
   };
 

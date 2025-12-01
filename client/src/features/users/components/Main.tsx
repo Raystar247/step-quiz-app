@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import type { RootState } from "../../../stores";
 import { useSelector } from "../../../stores";
-import { userApi } from "../api/userApi";
 import type { User } from "../../../models";
+import { userApiService } from "../infrastructure/api";
 
 export const Main = () => {
 
@@ -16,7 +16,7 @@ export const Main = () => {
             //     console.error("User IDが見つかりません");
             //     return;
             // }
-            const _user = await userApi.getUserInfo(userId);
+            const _user = await userApiService.getUserInfo(userId);
             setUser(_user);
         };
         getUser();

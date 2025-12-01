@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { SignInData, SignInResponse } from "../../../models";
-import { userApi } from "../api/userApi";
+import type { SignInData } from "../../../models";
 import type { AxiosError } from "axios";
 import persistReducer from "redux-persist/es/persistReducer";
 import sessionStorage from "redux-persist/lib/storage/session";
+import { userApiService } from "../infrastructure/api";
+import type { SignInResponse } from "../../../api/client";
 
 
 const user = createSlice({
@@ -17,11 +18,12 @@ const user = createSlice({
         builder
             .addCase(signInAsync.fulfilled, (state, action) => {
                 const payload = action.payload;
-                state.isSignedIn = payload.isAuthenticated;
+                console.log(payload);
+                state.isSignedIn = payload.success;
                 if (state.isSignedIn) {
-                    state.id = payload.id;
+                    state.id = payload.data.user.id;
                 }
-                sessionStorage.setItem("userId_", payload.id);
+                sessionStorage.setItem("userId_", payload.data.user.id);
             })
     }
 });
@@ -38,7 +40,7 @@ const signInAsync = createAsyncThunk<SignInResponse, SignInData>(
     'user/signInAsync',
     async (payload: SignInData, { rejectWithValue }) => {
         try {
-            const res = await userApi.signIn(payload);
+            const res = await userApiService.signIn(payload);      
             return res;
         } catch (error) {
             const axiosError = error as AxiosError;

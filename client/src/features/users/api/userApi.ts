@@ -6,7 +6,7 @@ import type { SignInData, SignInResponse, User, SignUpData } from '../../../mode
  * Purpose: ユーザー認証・取得の HTTP クライアントラッパー
  */
 
-const endpoint = `/user`;
+const endpoint = `/api/user`;
 
 export const userApi = {
         async signIn(signInData: SignInData): Promise<SignInResponse> {

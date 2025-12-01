@@ -38,6 +38,19 @@ export type TrialResponse = { success: true; data: components['schemas']['Trial'
 export type AnswerCreateResponse = { success: true; data: { id: string } };
 export type AnswerResponse = { success: true; data: components['schemas']['Answer'] };
 
+// Response shapes based on Backend API return value (将来的にはOpenAPIで管理したい)
+export type SignInResponse = { 
+  success: true; 
+  data: {
+    token: string;
+    user: {
+      id: string;
+      email: string;
+      username: string;
+    };
+  }
+};
+
 export const createTrial = async (dto: TrialCreateDTO): Promise<TrialResponse> => {
   const res = await api.post<TrialResponse>('/api/trial', dto);
   return res.data;
