@@ -14,7 +14,14 @@ const api: AxiosInstance = axios.create({ baseURL: getBaseUrl(), headers: { 'Con
 // Interceptor to attach token from localStorage (if present)
 api.interceptors.request.use((cfg) => {
   try {
-    const token = localStorage.getItem('token');
+    const userData = sessionStorage.getItem('persist:user');
+    if (!userData) { return cfg; }
+    const rawToken = JSON.parse(userData).token;
+    let token = rawToken;
+    if (typeof rawToken == "string" && rawToken.startsWith("\"")) {
+      token = JSON.parse(rawToken);
+    }
+    console.log(token);
     if (token) {
       // cfg.headers can be AxiosHeaders (class) or plain object depending on runtime.
       // Use a safe any-cast to set Authorization header.

@@ -7,30 +7,35 @@
  * 必要に応じて統合または削除してください。
  */
 
-import { axiosClient } from '../../../infrastructure/api/client/axiosClient';
+// import { axiosClient } from '../../../infrastructure/api/client/axiosClient';
+import axiosClient from '../../../api/client';
 import type { Answer, QGroup, Question, Trial, TrialPostData } from '../type';
 import type { User } from '../../users/type';
 
-const TRIAL_ENDPOINT = '/trial';
-const QGROUP_ENDPOINT = '/qgroup';
+const TRIAL_ENDPOINT = '/api/trial';
+const QGROUP_ENDPOINT = '/api/qgroup';
 const QUESTION_ENDPOINT = '/question';
 const ANSWER_ENDPOINT = '/answer';
 const USER_ENDPOINT = '/user';
 
 export const stepqApiService = {
     async generateTrial(qgroupKeyword: string, passphrase: string, userId: string): Promise<string> {
-        const qgroups = (await axiosClient.get<QGroup[]>(`${QGROUP_ENDPOINT}`)).data;
+        // TODO: get<QGroup[]>の型エラーになっているので、将来的に解消すべき
+        const qgroups = (await axiosClient.get<QGroup[]>(`${QGROUP_ENDPOINT}`)).data.data;
+        console.log(qgroups);
         const qgroup = qgroups.find((data: QGroup) => data.title === qgroupKeyword);
+        console.log("checkpoint 0");
         if (qgroup === undefined || passphrase !== qgroup.passphrase) {
             return '';
         }
-
+        // Unauthrizedエラーの解消
         const trials = (await axiosClient.get<Trial[]>(`${TRIAL_ENDPOINT}`)).data;
         const trial = trials.find((data: Trial) => (data.userId === userId && data.qgroupId === qgroup.id));
         if (trial) {
+            console.log("checkpoint A");
             return trial.id;
         }
-
+        console.log("checkpoint 1");
         const newTrial: TrialPostData = {
             userId,
             qgroupId: qgroup.id,
@@ -38,6 +43,7 @@ export const stepqApiService = {
             startTime: new Date().toISOString()
         };
         const res = (await axiosClient.post<Trial>(`${TRIAL_ENDPOINT}`, newTrial)).data;
+        console.log("checkpoint B");
         return res.id;
     },
 

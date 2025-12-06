@@ -5,36 +5,53 @@ import persistReducer from "redux-persist/es/persistReducer";
 import sessionStorage from "redux-persist/lib/storage/session";
 import { userApiService } from "../infrastructure/api";
 import type { SignInResponse } from "../../../api/client";
+import { confirmTokenValid } from "../../../utils/auth/jwt";
 
+// ---------------------------------------------------------
+// ★ 初期化処理をここで実行する（差分部分）
+// ---------------------------------------------------------
 
+// persist:user には JSON 文字列が入っている
+const persistedRaw = sessionStorage.getItem("persist:user");
+
+let initialState = {
+    isSignedIn: false,
+    id: "",
+    token: ""
+};
+
+// ---------------------------------------------------------
+// Slice
+// ---------------------------------------------------------
 const user = createSlice({
     name: 'user',
-    initialState: {
-        isSignedIn: false,
-        id: ""
-    },
+
+    // ★ initialState を上書き
+    initialState,
+
     reducers: { },
     extraReducers: (builder) => {
         builder
             .addCase(signInAsync.fulfilled, (state, action) => {
                 const payload = action.payload;
-                console.log(payload);
+                const token = payload.data.token;
+
+                if (!confirmTokenValid(token)) {
+                    console.warn("Token expired or invalid.");
+                    state.isSignedIn = false;
+                    state.id = "";
+                    state.token = "";
+                    return;
+                }
+
                 state.isSignedIn = payload.success;
                 if (state.isSignedIn) {
                     state.id = payload.data.user.id;
+                    state.token = token;
                 }
-                sessionStorage.setItem("userId_", payload.data.user.id);
             })
     }
 });
-
-
-// const signIn = createAsyncThunk(
-//     'user/signIn',
-//     async (payload: SignInData, { rejectWithValue }) => {
-
-//     }
-// );
 
 const signInAsync = createAsyncThunk<SignInResponse, SignInData>(
     'user/signInAsync',
@@ -53,7 +70,8 @@ export { signInAsync };
 
 const persistConfig = {
     key: "user",
-    storage: sessionStorage
+    storage: sessionStorage,
+    whitelist: ["isSignedIn", "id", "token"]
 };
 
 const persistedUserReducer = persistReducer(persistConfig, user.reducer);

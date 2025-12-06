@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { stepqApi } from '../api/stepqApi';
 import type { Answer, Trial, Question } from '../../../models';
+import { stepqApiService } from '../infrastructure/api';
 
 /**
  * store for trial-related state
@@ -28,7 +29,7 @@ const initialState: TrialState = {
 
 export const generateTrial = createAsyncThunk('trial/generate', async ({ qgroupKeyword, passphrase, userId }:
   { qgroupKeyword: string; passphrase: string; userId: string }) => {
-  const id = await stepqApi.generateTrial(qgroupKeyword, passphrase, userId);
+  const id = await stepqApiService.generateTrial(qgroupKeyword, passphrase, userId);
   return id;
 });
 

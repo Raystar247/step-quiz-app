@@ -10,8 +10,8 @@ const ApiDemo: React.FC = () => {
 
   const saveToken = () => {
     try {
-      localStorage.setItem('token', token);
-      addLog('Token saved to localStorage');
+      sessionStorage.setItem('token', token);
+      addLog('Token saved to sessionStorage');
     } catch (e) {
       addLog('Failed to save token');
     }
