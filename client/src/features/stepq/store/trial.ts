@@ -52,7 +52,7 @@ export const fetchQuestionByIndex = createAsyncThunk('trial/fetchQuestionByIndex
 });
 
 export const fetchQuestionsOfQGroup = createAsyncThunk('trial/fetchQuestionsOfQGroup', async (qgroupId: string) => {
-  const qs = await stepqApi.fetchQuestionsOfQGroup(qgroupId);
+  const qs = await stepqApiService.fetchQuestionsOfQGroup(qgroupId);
   return qs;
 });
 

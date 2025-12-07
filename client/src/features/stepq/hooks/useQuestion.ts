@@ -25,14 +25,14 @@ export const useQuestion = (trial: Trial, index: number, onIndexChange: (idx: nu
   const [answer, setAnswer] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const currentQuestion = useSelector((state: RootState) => state.trial.currentQuestion);
 
   // 問題データをフェッチ
   useEffect(() => {
     const fetchQuestion = async () => {
       console.log(`AAA index: ${index}`);
       const res = await dispatch(fetchQuestionByIndex({ trialId: trial.id, index } as any)).unwrap().catch(() => undefined);
-      setQuestion(res ?? currentQuestion);
+      console.log(res);
+      setQuestion(res);
     };
     fetchQuestion();
   }, [trial.qgroupId, index]);
@@ -42,7 +42,9 @@ export const useQuestion = (trial: Trial, index: number, onIndexChange: (idx: nu
     const res = await dispatch(fetchQuestionsOfQGroup(trial.qgroupId)).unwrap().catch(() => []);
     const questions = res ?? [];
     if (!questions || questions.length === 0) return false;
-    const maxIndex = Math.max(...questions.map(q => q.index));
+    // toBetter: 問題更新時に毎回フェッチしている（本来は1回取得できれば十分のはず）
+    const maxIndex = Math.max(...questions.data.map(q => q.index));
+    console.log(`maxIndex: ${maxIndex}`);
     return currentIdx >= maxIndex;
   }, [trial.qgroupId, dispatch]);
 
@@ -50,12 +52,14 @@ export const useQuestion = (trial: Trial, index: number, onIndexChange: (idx: nu
   const handleSubmitAnswer = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+      console.log(`submit: ${question}`);
       if (!question) return;
 
       await dispatch(postAnswer({ answerText: answer, trialId: trial.id, questionId: question.id } as any)).unwrap().catch(() => false);
       setAnswer('');
 
       const lastQuestion = await isLastQuestion(index);
+      console.log(`isLastQuestion ${lastQuestion}`);
       if (lastQuestion) {
         navigate('/stepq/end', { state: { key: 'answerall' } });
       } else {
