@@ -13,7 +13,8 @@ export const createTrial = async (req: Request, res: Response, next: NextFunctio
 
 export const getTrial = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const id = (req.query.id as string) ?? undefined;
+    const id = req.params.id ?? (req.query.id as string) ?? undefined;
+    console.log(id);
     const qgroupId = (req.query.qgroupId as string) ?? undefined;
     const userId = (req.query.userId as string) ?? undefined;
     if (id) {

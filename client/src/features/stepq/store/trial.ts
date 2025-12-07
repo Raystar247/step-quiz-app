@@ -40,7 +40,7 @@ export const fetchPlayerAnswers = createAsyncThunk('trial/fetchAnswers', async (
 });
 
 export const fetchTrial = createAsyncThunk('trial/fetchTrial', async (trialId: string) => {
-  const t = await stepqApi.fetchTrial(trialId);
+  const t = await stepqApiService.fetchTrial(trialId);
   return t as Trial | undefined;
 });
 

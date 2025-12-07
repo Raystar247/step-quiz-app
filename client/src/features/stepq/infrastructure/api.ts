@@ -40,8 +40,10 @@ export const stepqApiService = {
     },
 
     async fetchTrial(trialId: string): Promise<Trial | undefined> {
-        const trials = (await axiosClient.get<Trial[]>(`${TRIAL_ENDPOINT}`)).data;
-        return trials.find((trial: Trial) => trial.id === trialId);
+        const trial = (await axiosClient.get<Trial>(`${TRIAL_ENDPOINT}/${trialId}`)).data;
+        console.log("checkpoint: fetchTrial");
+        console.log(trial);
+        return trial;
     },
 
     async fetchQuestionByIndex(trialId: string, index: number): Promise<Question | undefined> {
