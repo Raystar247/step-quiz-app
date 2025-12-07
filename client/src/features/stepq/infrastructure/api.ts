@@ -29,22 +29,14 @@ export const stepqApiService = {
             return '';
         }
         // Unauthrizedエラーの解消
-        const trials = (await axiosClient.get<Trial[]>(`${TRIAL_ENDPOINT}`)).data;
-        const trial = trials.find((data: Trial) => (data.userId === userId && data.qgroupId === qgroup.id));
-        if (trial) {
-            console.log("checkpoint A");
-            return trial.id;
+        const dto = {
+            title: qgroupKeyword,
+            passphrase: passphrase,
+            userId: userId
         }
-        console.log("checkpoint 1");
-        const newTrial: TrialPostData = {
-            userId,
-            qgroupId: qgroup.id,
-            index: 1,
-            startTime: new Date().toISOString()
-        };
-        const res = (await axiosClient.post<Trial>(`${TRIAL_ENDPOINT}`, newTrial)).data;
-        console.log("checkpoint B");
-        return res.id;
+        const res = await axiosClient.post(`${TRIAL_ENDPOINT}`, dto);
+        console.log(res.data.data.id);
+        return res.data.data.id;
     },
 
     async fetchTrial(trialId: string): Promise<Trial | undefined> {
