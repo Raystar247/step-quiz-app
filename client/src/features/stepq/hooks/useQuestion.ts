@@ -30,11 +30,12 @@ export const useQuestion = (trial: Trial, index: number, onIndexChange: (idx: nu
   // 問題データをフェッチ
   useEffect(() => {
     const fetchQuestion = async () => {
-      const res = await dispatch(fetchQuestionByIndex({ qgroupId: trial.qgroupId, index } as any)).unwrap().catch(() => undefined);
+      console.log(`AAA index: ${index}`);
+      const res = await dispatch(fetchQuestionByIndex({ trialId: trial.id, index } as any)).unwrap().catch(() => undefined);
       setQuestion(res ?? currentQuestion);
     };
     fetchQuestion();
-  }, [trial.qgroupId, index, currentQuestion]);
+  }, [trial.qgroupId, index]);
 
   // 最後の問題判定
   const isLastQuestion = useCallback(async (currentIdx: number): Promise<boolean> => {

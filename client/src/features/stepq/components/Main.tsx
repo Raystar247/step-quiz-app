@@ -20,16 +20,26 @@ import { fetchTrial } from '../store/trial';
 
 export const Main: React.FC = () => {
     const urlParam = useParams<{ id: string }>();
-    const [trialIndex, setTrialIndex] = useState(0);
     const dispatch = useDispatch<AppDispatch>();
-    const trial = useSelector((state: RootState) => state.trial.currentTrial);
+    // TOFIX: currentTrialには現状Response型が入っているのでdataを取得すべきだが、
+    // currentTrialの定義はTrial|undefinedなので、dataを取れない
+    // → currentTrialの定義を修正し、周辺箇所と
+    const trial = useSelector((state: RootState) => state.trial.currentTrial?.data);
+    // trialIndexの初期化ができていない（trial?.index=1を代入しているはずだが、なぜが0が入っている）
+    const [trialIndex, setTrialIndex] = useState(-1);
+
+    useEffect(() => {
+    if (trial?.index !== undefined) {
+        setTrialIndex(trial.index);
+    }
+}, [trial?.index]);
 
     useEffect(() => {
         const awake = async () => {
             if (!urlParam.id) return;
             const res = await dispatch(fetchTrial(urlParam.id as string)).unwrap().catch(() => undefined);
             // if the store has the trial, set local index from it
-            if (res) setTrialIndex(res.index ?? 0);
+            if (res) setTrialIndex(res.data.index ?? 0);
         };
         awake();
     }, []);

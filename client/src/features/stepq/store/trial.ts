@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { stepqApi } from '../api/stepqApi';
 import type { Answer, Trial, Question } from '../../../models';
 import { stepqApiService } from '../infrastructure/api';
+import type { TrialResponse } from '../../../api/client';
 
 /**
  * store for trial-related state
@@ -12,7 +13,7 @@ import { stepqApiService } from '../infrastructure/api';
 
 type TrialState = {
   currentTrialId?: string;
-  currentTrial?: Trial;
+  currentTrial?: TrialResponse;
   currentQuestion?: Question;
   questions: Question[];
   playerAnswers: Answer[];
@@ -44,9 +45,9 @@ export const fetchTrial = createAsyncThunk('trial/fetchTrial', async (trialId: s
   return t as Trial | undefined;
 });
 
-export const fetchQuestionByIndex = createAsyncThunk('trial/fetchQuestionByIndex', async ({ qgroupId, index }:
-  { qgroupId: string; index: number }) => {
-  const q = await stepqApi.fetchQuestionByIndex(qgroupId, index);
+export const fetchQuestionByIndex = createAsyncThunk('trial/fetchQuestionByIndex', async ({ trialId, index }:
+  { trialId: string; index: number }) => {
+  const q = await stepqApiService.fetchQuestionByIndex(trialId, index);
   return q as Question | undefined;
 });
 

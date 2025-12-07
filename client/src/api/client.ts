@@ -21,7 +21,6 @@ api.interceptors.request.use((cfg) => {
     if (typeof rawToken == "string" && rawToken.startsWith("\"")) {
       token = JSON.parse(rawToken);
     }
-    console.log(token);
     if (token) {
       // cfg.headers can be AxiosHeaders (class) or plain object depending on runtime.
       // Use a safe any-cast to set Authorization header.

@@ -138,6 +138,9 @@ npm test
 
 
 
-1201
-次やること：QGroupの取得についてBackend側のAPIに対応させる
-- Unauthrizedエラーの解消(stepq/api.ts(L31))
+1207
+次やること：Questionの取得についてBackend側のAPIに対応させる
+- TOFIXで概要を記載している（検索かけて調べよう）→ 動くようにはなったが、データ型を再検討して明示するべき（エラー波線が出るから）
+- important!: indexがuseStateと不整合が原因→解決
+- answer.postのAPI整合
+- index == nQuestions + 1で終了画面を出すように修正する

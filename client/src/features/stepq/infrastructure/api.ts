@@ -14,7 +14,7 @@ import type { User } from '../../users/type';
 
 const TRIAL_ENDPOINT = '/api/trial';
 const QGROUP_ENDPOINT = '/api/qgroup';
-const QUESTION_ENDPOINT = '/question';
+const QUESTION_ENDPOINT = '/api/question';
 const ANSWER_ENDPOINT = '/answer';
 const USER_ENDPOINT = '/user';
 
@@ -22,9 +22,7 @@ export const stepqApiService = {
     async generateTrial(qgroupKeyword: string, passphrase: string, userId: string): Promise<string> {
         // TODO: get<QGroup[]>の型エラーになっているので、将来的に解消すべき
         const qgroups = (await axiosClient.get<QGroup[]>(`${QGROUP_ENDPOINT}`)).data.data;
-        console.log(qgroups);
         const qgroup = qgroups.find((data: QGroup) => data.title === qgroupKeyword);
-        console.log("checkpoint 0");
         if (qgroup === undefined || passphrase !== qgroup.passphrase) {
             return '';
         }
@@ -35,23 +33,23 @@ export const stepqApiService = {
             userId: userId
         }
         const res = await axiosClient.post(`${TRIAL_ENDPOINT}`, dto);
-        console.log(res.data.data.id);
         return res.data.data.id;
     },
 
     async fetchTrial(trialId: string): Promise<Trial | undefined> {
         const trial = (await axiosClient.get<Trial>(`${TRIAL_ENDPOINT}/${trialId}`)).data;
-        console.log("checkpoint: fetchTrial");
-        console.log(trial);
+
         return trial;
     },
 
     async fetchQuestionByIndex(trialId: string, index: number): Promise<Question | undefined> {
         const trial = await this.fetchTrial(trialId);
         if (!trial) return undefined;
-
-        const questions = (await axiosClient.get<Question[]>(`${QUESTION_ENDPOINT}?qgroupId=${trial.qgroupId}`)).data;
-        return questions.find((q: Question) => q.index === index);
+        //console.log(`questionId: ${trial.data.qgroupId}`) // trialのデータ型は再検討して明示するべき（波線になるから）
+        const questions = (await axiosClient.get<Question[]>(`${QUESTION_ENDPOINT}?qgroupId=${trial.data.qgroupId}`)).data;
+        console.log(index); // trialIndexは0だが-1が入っている（trial?.index=undefined）
+        console.log(questions);
+        return questions.data.find((q: Question) => q.index === index);
     },
 
     async postAnswer(answer: Answer): Promise<Answer> {
