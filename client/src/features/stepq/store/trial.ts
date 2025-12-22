@@ -36,7 +36,9 @@ export const generateTrial = createAsyncThunk('trial/generate', async ({ qgroupK
 
 export const fetchPlayerAnswers = createAsyncThunk('trial/fetchAnswers', async ({ qgroupId, userId }:
   { qgroupId: string; userId: string }) => {
-  const answers = await stepqApi.fetchPlayerAnswers(qgroupId, userId);
+  const answers = await stepqApiService.fetchPlayerAnswers(qgroupId, userId);
+  console.log("bbb");
+  console.log(answers);
   return answers;
 });
 
@@ -58,7 +60,7 @@ export const fetchQuestionsOfQGroup = createAsyncThunk('trial/fetchQuestionsOfQG
 
 export const postAnswer = createAsyncThunk('trial/postAnswer', async ({ answerText, trialId, questionId }:
   { answerText: string; trialId: string; questionId: string }) => {
-  const ok = await stepqApi.postAnswer(answerText, trialId, questionId);
+  const ok = await stepqApiService.postAnswer({answer: answerText, trialId, questionId});
   return ok;
 });
 

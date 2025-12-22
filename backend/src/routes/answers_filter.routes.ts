@@ -10,8 +10,8 @@ router.get("/by-user", authenticate, async (req, res, next) => {
     const qgroupId = req.query.qgroupId as string;
     if (!username || !qgroupId) return res.status(400).json({ success: false, error: { code: "VALIDATION_ERROR", message: "username and qgroupId required" } });
     // resolve username -> userId (simple repo call) -- reuse user repository
-    const { findByEmail } = await import("../repositories/user.repository");
-    const user = await findByEmail(username);
+    const { findByName } = await import("../repositories/user.repository");
+    const user = await findByName(username);
     if (!user) return res.status(404).json({ success: false, error: { code: "NOT_FOUND", message: "user not found" } });
     // find trials then answers
     const trialRepo = await import("../repositories/trial.repository");

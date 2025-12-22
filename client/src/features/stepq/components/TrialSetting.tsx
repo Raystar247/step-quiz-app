@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import type { AppDispatch, RootState } from '../../../stores';
 import { useSelector } from '../../../stores';
 import { generateTrial } from '../store/trial';
+import { stepqApiService } from "../infrastructure/api";
 
 const TrialSetting: React.FC = () => {
 
@@ -30,8 +31,7 @@ const TrialSetting: React.FC = () => {
 
     const handleConfirm = async () => {
       // keep calling API directly for group id lookup (thin API layer)
-      const { stepqApi } = await import('../api/stepqApi');
-      const id = await stepqApi.fetchQuestionGroupId(form.keyword);
+      const id = await stepqApiService.fetchQuestionGroupId(form.keyword);
       navigate(`/scored/${id}`);
     }
 

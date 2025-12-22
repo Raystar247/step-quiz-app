@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import type { Answer, Question, ScoringFormattedAnswer } from "../../../models";
-import { stepqApi } from "../api/stepqApi";
 import type { User } from "../../../models";
 import { ScoreResult } from "./ScoreResult";
 import { useSelector, type RootState } from "../../../stores";
 import { useDispatch } from 'react-redux';
 import type { AppDispatch } from '../../../stores';
 import { fetchPlayerAnswers } from '../store/trial';
+import { stepqApiService } from "../infrastructure/api";
 
 export const ScoredPage = () => {
   const urlParam = useParams<{ qgroupId: string }>();
@@ -30,7 +30,7 @@ export const ScoredPage = () => {
           username: "",
           answer: ans,
         };
-      const user: User = await stepqApi.fetchUserByAnswer(ans);
+      const user: User = await stepqApiService.fetchUserByAnswer(ans);
       return {
         index: ans.id ? parseInt(ans.id.slice(-4), 16) : -1,
         qindex: question.index,
@@ -42,9 +42,12 @@ export const ScoredPage = () => {
     };
 
     if (!urlParam.qgroupId) return [];
-    const allQuestions = await stepqApi.fetchQuestionsOfQGroup(urlParam.qgroupId);
+    const allQuestions = await stepqApiService.fetchQuestionsOfQGroup(urlParam.qgroupId);
+    console.log("---test---");
+    console.log(allQuestions);
     if (!allQuestions) return [];
-
+    console.log("checkpoint 0");
+    console.log(answers);
     return Promise.all(answers.map((ans) => addInfo(ans, allQuestions)));
   };
 
@@ -52,8 +55,10 @@ export const ScoredPage = () => {
     const f = async () => {
       if (!urlParam.qgroupId) { return; }
       // fetch player answers through store thunk
-      await dispatch(fetchPlayerAnswers({ qgroupId: urlParam.qgroupId, userId } as any)).unwrap().catch(() => []);
-      const fmtAnswers = await formatAnswer(playerAnswers);
+      const answers = await dispatch(fetchPlayerAnswers({ qgroupId: urlParam.qgroupId, userId } as any)).unwrap().catch(() => []);
+      const fmtAnswers = await formatAnswer(answers);
+      console.log("format answer");
+      console.log(fmtAnswers);
       setFormattedAnswers(fmtAnswers);
     };
     f();

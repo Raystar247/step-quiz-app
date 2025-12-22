@@ -7,6 +7,7 @@ import { SelectHeader } from "./SelectHeader";
 import { ScoringSheet } from "./ScoringSheet";
 import { LiquidGlass } from "../../../fundamentalComponents/LiquidGlass";
 import { useScoringFormatter } from "../hooks/useScoringFormatter";
+import { stepqApiService } from "../infrastructure/api";
 
 export const ScoringPage = () => {
     const urlParam = useParams<{ qgroupId: string }>();
@@ -22,11 +23,13 @@ export const ScoringPage = () => {
                 setFormattedAnswers([]);
                 return;
             }
-            const allQuestions = await stepqApi.fetchQuestionsOfQGroup(urlParam.qgroupId);
+            const allQuestions = (await stepqApiService.fetchQuestionsOfQGroup(urlParam.qgroupId));
             if (!allQuestions || allQuestions.length === 0) {
                 setFormattedAnswers([]);
                 return;
             }
+            console.log("--test questions--");
+            console.log(allQuestions);
             const formatted = await formatAnswers(answers, allQuestions, unit);
             setFormattedAnswers(formatted);
         };
@@ -35,7 +38,7 @@ export const ScoringPage = () => {
 
     const savedAnswersScored = async () => {
         for (const formattedAnswer of formattedAnswers) {
-            await stepqApi.updateAnswerScored(formattedAnswer.answer);
+            await stepqApiService.updateAnswerScore(formattedAnswer.answer);
         }
     };
 

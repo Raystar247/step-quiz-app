@@ -12,6 +12,7 @@ import { useCallback, useState } from 'react';
 import type { Answer, Question, ScoringFormattedAnswer, UnitString } from '../type';
 import type { User } from '../../users/type';
 import { stepqApi } from '../api/stepqApi';
+import { stepqApiService } from '../infrastructure/api';
 
 /**
  * 解答に問題情報とユーザー情報を付与してフォーマット
@@ -48,7 +49,7 @@ export const useScoringFormatter = () => {
               } as ScoringFormattedAnswer;
             }
 
-            const user: User = await stepqApi.fetchUserByAnswer(ans);
+            const user: User = await stepqApiService.fetchUserByAnswer(ans);
             return {
               index: ans.id ? parseInt(ans.id.slice(-4), 16) : -1,
               qindex: question.index,

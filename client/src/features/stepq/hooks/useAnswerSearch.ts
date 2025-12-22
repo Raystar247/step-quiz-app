@@ -11,6 +11,7 @@
 import { useCallback, useState } from 'react';
 import type { Answer, UnitString } from '../type';
 import { stepqApi } from '../api/stepqApi';
+import { stepqApiService } from '../infrastructure/api';
 
 /**
  * 検索テキストと単位（user/question）を管理し、フィルタリング結果を返す
@@ -31,8 +32,12 @@ export const useAnswerSearch = () => {
 
       setIsSearching(true);
       try {
-        const results = await stepqApi.filterAnswers(unit, searchText, qgroupId);
-        return results;
+        // const results = await stepqApi.filterAnswers(unit, searchText, qgroupId);
+        if (unit == 'user') {
+          const answers = await stepqApiService.fetchAnswersByUserAndQgroup(searchText, qgroupId);
+          return answers;
+        }
+        return []; // TODO: question絞り込みは未実装
       } finally {
         setIsSearching(false);
       }
