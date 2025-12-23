@@ -1,0 +1,10 @@
+.git
+.github
+node_modules
+**/node_modules
+client/dist
+backend/dist
+.env
+.DS_Store
+npm-debug.log
+coverage

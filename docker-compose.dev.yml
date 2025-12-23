@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    env_file: .env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  backend:
+    image: node:20-bookworm
+    env_file: .env
+    volumes:
+      - ./backend:/usr/src/app:delegated
+      - /usr/src/app/node_modules
+    working_dir: /usr/src/app
+    command: sh -c "npm ci --legacy-peer-deps && npx prisma migrate deploy || true && npm run dev"
+    depends_on:
+      - postgres
+    ports:
+      - "${BACKEND_PORT:-3000}:${BACKEND_PORT:-3000}"
+
+  frontend:
+    image: node:20-bookworm
+    env_file: .env
+    volumes:
+      - ./client:/app:delegated
+      - /app/node_modules
+    working_dir: /app
+    command: sh -c "npm ci --legacy-peer-deps && npm run dev"
+    ports:
+      - "${FRONTEND_PORT:-5173}:${FRONTEND_PORT:-5173}"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
