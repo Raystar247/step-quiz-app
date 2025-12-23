@@ -1,5 +1,10 @@
+# syntax: docker/dockerfile:1.4
 FROM node:20-bookworm AS builder
 WORKDIR /usr/src/app
+
+# Allow passing DATABASE_URL at build time for prisma generate
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
 
 # Install production+dev dependencies for build
 COPY package*.json ./
@@ -22,6 +27,9 @@ RUN npm ci --omit=dev
 # Copy built files and prisma schema
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/prisma ./prisma
+# Copy generated Prisma client from builder so runtime has initialized client
+COPY --from=builder /usr/src/app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /usr/src/app/node_modules/@prisma ./node_modules/@prisma
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
